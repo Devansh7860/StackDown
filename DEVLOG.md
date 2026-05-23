@@ -27,3 +27,15 @@ Built the entire audit engine today. Rules for all 8 tools, cross-tool overlap d
 Also wired up the `/api/audit` route — Zod validation, Upstash rate limiting, Anthropic summary with fallback, Supabase write. Gracefully handles missing env keys so local dev doesn't blow up.
 
 Tomorrow: results page and shareable audit URLs.
+
+---
+
+## Day 4 — 2026-05-24
+
+Built the results page (`/audit/[token]`) which renders the audit summary. It has a count-up animation for the total savings using `requestAnimationFrame`, and triggers `canvas-confetti` when savings exceed $1000. 
+
+Implemented a dual-read strategy: the client reads from `sessionStorage` instantly upon form submission (so it works without Supabase locally), and falls back to a GET `/api/audit/[token]` endpoint for shareable URLs. 
+
+Added Web Share API for mobile sharing, fallback to clipboard copy. Wired up dynamic Open Graph (`generateMetadata`) on the server wrapper so shared links display the actual dollar amount saved in the preview image/text.
+
+Tomorrow: AI summary prompt engineering, lead capture form, and Resend emails.
