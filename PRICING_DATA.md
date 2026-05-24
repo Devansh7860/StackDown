@@ -2,7 +2,7 @@
 ## AI Tool Pricing Verification Log
 
 > **Purpose:** Every pricing number used in SpendLens must be verified against official sources. This file is the audit trail.
-> **Last full verification:** 2026-05-22
+> **Last full verification:** 2026-05-24
 > **Verified by:** Prateek (manual spot-check of each pricing page)
 
 ---
@@ -10,38 +10,42 @@
 ## Cursor
 
 **Source:** https://cursor.com/pricing
-**Date verified:** 2026-05-22
+**Date verified:** 2026-05-24
 
 | Plan | Price/seat/mo | Notes |
 |------|---------------|-------|
 | Hobby | $0 | 2,000 completions, 50 slow premium requests |
-| Pro | $20 | 500 fast premium requests/mo, unlimited slow, unlimited completions |
-| Business | $40 | Pro + SSO/SAML, admin dashboard, zero data retention, invoice billing |
+| Pro | $20 | Unlimited completions, unlimited auto mode, $20 premium credits/mo |
+| Pro+ | $60 | Everything in Pro, $60 premium credits/mo |
+| Ultra | $200 | Everything in Pro+, $200 premium credits/mo |
+| Teams | $40 | Pro features + SSO/SAML, admin dashboard, zero data retention |
 | Enterprise | Custom | Contract pricing, dedicated support |
 
-**Key audit insight:** Business adds SSO, admin dashboard, and invoice billing. For teams <10 without compliance requirements, Pro is functionally identical for coding tasks. Savings: ($40−$20) × seats = $20/seat/mo.
+**Key audit insight:** Teams adds SSO, admin dashboard, and invoice billing. For teams <10 without compliance requirements, Pro is functionally identical for coding tasks. Savings: ($40−$20) × seats = $20/seat/mo.
 
 ---
 
 ## GitHub Copilot
 
 **Source:** https://github.com/features/copilot#pricing
-**Date verified:** 2026-05-22
+**Date verified:** 2026-05-24
 
 | Plan | Price/seat/mo | Notes |
 |------|---------------|-------|
-| Individual | $10 | Code completions, Copilot Chat, CLI assistance |
-| Business | $19 | Individual + org management, policy controls, audit logs, IP indemnity |
+| Free | $0 | Evaluation plan, 2,000 completions/mo |
+| Pro | $10 | Code completions, Copilot Chat, $10 AI Credits/mo |
+| Pro+ | $39 | Power users, higher limits, Claude Opus & o3 access |
+| Business | $19 | Pro + org management, policy controls, audit logs, IP indemnity |
 | Enterprise | $39 | Business + custom fine-tuned models, knowledge bases |
 
-**Key audit insight:** Copilot Individual and Cursor Pro have near-identical feature sets for most dev workflows. Teams using Cursor as their primary IDE do not need a separate Copilot subscription.
+**Key audit insight:** Copilot Pro and Cursor Pro have near-identical feature sets for most dev workflows. Teams using Cursor as their primary IDE do not need a separate Copilot subscription.
 
 ---
 
 ## Claude (Anthropic)
 
 **Source:** https://www.anthropic.com/pricing
-**Date verified:** 2026-05-22
+**Date verified:** 2026-05-24
 
 | Plan | Price/seat/mo | Min seats | Notes |
 |------|---------------|-----------|-------|
@@ -59,12 +63,14 @@
 ## ChatGPT (OpenAI)
 
 **Source:** https://openai.com/chatgpt/pricing
-**Date verified:** 2026-05-22
+**Date verified:** 2026-05-24
 
 | Plan | Price/seat/mo | Min seats | Notes |
 |------|---------------|-----------|-------|
 | Free | $0 | 1 | Limited GPT-4o access |
+| Go | $8 | 1 | Higher limits than free, standard response times |
 | Plus | $20 | 1 | Full GPT-4o, DALL-E 3, Advanced Data Analysis |
+| Pro | $200 | 1 | Unlimited access, Pro mode, advanced reasoning models |
 | Team | $30 | 2 | Plus + admin console, higher limits, data excluded from training |
 | Enterprise | Custom | 1 | Unlimited GPT-4o, SSO, custom retention |
 
@@ -75,7 +81,7 @@
 ## Anthropic API
 
 **Source:** https://www.anthropic.com/pricing#api
-**Date verified:** 2026-05-22
+**Date verified:** 2026-05-24
 
 | Model | Input (per MTok) | Output (per MTok) |
 |-------|------------------|-------------------|
@@ -92,7 +98,7 @@
 ## OpenAI API
 
 **Source:** https://openai.com/pricing
-**Date verified:** 2026-05-22
+**Date verified:** 2026-05-24
 
 | Model | Input (per MTok) | Output (per MTok) |
 |-------|------------------|-------------------|
@@ -109,7 +115,7 @@
 ## Gemini (Google)
 
 **Source:** https://one.google.com/about/plans (consumer) / https://ai.google.dev/pricing (API)
-**Date verified:** 2026-05-22
+**Date verified:** 2026-05-24
 
 | Plan | Price/seat/mo | Notes |
 |------|---------------|-------|
@@ -124,7 +130,7 @@
 ## Windsurf (Codeium)
 
 **Source:** https://codeium.com/pricing
-**Date verified:** 2026-05-22
+**Date verified:** 2026-05-24
 
 | Plan | Price/seat/mo | Notes |
 |------|---------------|-------|
