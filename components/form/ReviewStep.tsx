@@ -3,6 +3,7 @@
 import { TOOLS } from '@/lib/audit-engine/tools';
 import type { ToolId, UseCase } from '@/lib/audit-engine/types';
 import { Loader2 } from 'lucide-react';
+import { ToolLogo } from '@/components/ui/tool-logo';
 
 interface ToolEntry {
   toolId: ToolId;
@@ -59,9 +60,9 @@ export function ReviewStep({
           {tools.map((tool) => {
             const toolMeta = TOOLS[tool.toolId];
             return (
-              <div key={tool.toolId} className="flex items-center justify-between px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">{toolMeta.icon}</span>
+              <div key={tool.toolId} className="flex items-center justify-between px-4 py-3 hover:bg-[#18181B] transition-colors">
+                <div className="flex items-center gap-3">
+                  <ToolLogo toolId={tool.toolId} size={18} />
                   <div>
                     <p className="text-sm font-medium text-[#FAFAFA]">{toolMeta.name}</p>
                     <p className="text-xs text-[#71717A]">
@@ -108,10 +109,10 @@ export function ReviewStep({
         id="submit-audit-btn"
         onClick={onSubmit}
         disabled={isSubmitting}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg
-          bg-[#22C55E] hover:bg-[#16A34A] disabled:opacity-60 disabled:cursor-not-allowed
-          text-black font-semibold text-sm transition-all duration-200
-          shadow-[0_0_20px_rgba(34,197,94,0.2)] hover:shadow-[0_0_30px_rgba(34,197,94,0.4)]"
+        className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl
+          bg-[#FAFAFA] hover:bg-[#E4E4E7] disabled:opacity-50 disabled:cursor-not-allowed
+          text-[#09090B] font-semibold text-sm transition-all duration-300
+          shadow-[0_0_20px_rgba(250,250,250,0.1)] hover:shadow-[0_0_30px_rgba(250,250,250,0.15)]"
       >
         {isSubmitting ? (
           <>

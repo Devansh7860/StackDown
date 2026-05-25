@@ -1,24 +1,35 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState, useMemo } from 'react';
+import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import {
-  TrendingDown,
-  AlertTriangle,
-  CheckCircle2,
   ArrowLeft,
   Copy,
   Check,
   ExternalLink,
-  Zap,
+  ChevronDown,
+  ChevronUp,
+  AlertTriangle,
+  Minus,
+  ArrowDownRight,
 } from 'lucide-react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from 'recharts';
 import { cn } from '@/lib/utils';
 import type { AuditResult, ToolRecommendation, OverlapWarning } from '@/lib/audit-engine/types';
 import { TOOLS } from '@/lib/audit-engine/tools';
+import { ToolLogo } from '@/components/ui/tool-logo';
 import { useCountUp } from '@/hooks/useCountUp';
-import confetti from 'canvas-confetti';
+import { LeadCapture } from '@/components/form/LeadCapture';
 
 interface AuditData {
   shareToken: string;
@@ -31,105 +42,155 @@ function fmt(n: number) {
 }
 
 const ACTION_LABELS: Record<string, string> = {
-  downgrade: 'Downgrade plan',
+  downgrade: 'Downgrade',
   cancel: 'Cancel',
-  switch: 'Consider cancelling',
+  switch: 'Switch',
   consolidate: 'Consolidate',
-  optimize: 'Optimize spend',
-  keep: 'Keep as-is',
+  optimize: 'Optimize',
+  keep: 'Keep',
 };
 
-const ACTION_COLORS: Record<string, string> = {
-  downgrade: 'text-[#22C55E] bg-[#22C55E]/10 border-[#22C55E]/30',
-  cancel: 'text-[#EF4444] bg-[#EF4444]/10 border-[#EF4444]/30',
-  switch: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30',
-  consolidate: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30',
-  optimize: 'text-[#A78BFA] bg-[#A78BFA]/10 border-[#A78BFA]/30',
-  keep: 'text-[#71717A] bg-[#27272A] border-[#3F3F46]',
-};
+// ─── KPI Card ────────────────────────────────────────────────────────────────
 
-const SEVERITY_COLORS: Record<string, string> = {
-  high: 'text-[#EF4444] bg-[#EF4444]/10 border-[#EF4444]/30',
-  medium: 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/30',
-  low: 'text-[#71717A] bg-[#27272A] border-[#3F3F46]',
-};
+function KpiCard({
+  label,
+  value,
+  subtext,
+  highlight,
+}: {
+  label: string;
+  value: string;
+  subtext?: string;
+  highlight?: 'green' | 'red' | 'neutral';
+}) {
+  const colorMap = {
+    green: 'text-[#22C55E]',
+    red: 'text-[#EF4444]',
+    neutral: 'text-[#FAFAFA]',
+  };
 
-function RecommendationCard({ rec }: { rec: ToolRecommendation }) {
-  const tool = TOOLS[rec.toolId];
-  const hasSavings = rec.monthlySavings > 0;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={cn(
-        'border rounded-xl p-5 space-y-3',
-        hasSavings ? 'border-[#22C55E]/30 bg-[#18181B]' : 'border-[#27272A] bg-[#18181B]'
+    <div className="relative overflow-hidden bg-[#111113] border border-[#1E1E21] rounded-xl p-6 shadow-sm">
+      {highlight === 'green' && (
+         <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#10B981] to-transparent opacity-50" />
       )}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <span className="text-lg">{tool?.icon}</span>
-          <div>
-            <p className="text-sm font-semibold text-[#FAFAFA]">{rec.toolName}</p>
-            <p className="text-xs text-[#71717A]">{rec.currentPlan}</p>
+      <p className="text-[11px] text-[#52525B] uppercase tracking-wider mb-2 font-medium">{label}</p>
+      <p className={cn('text-3xl font-semibold mono-num tracking-tight', colorMap[highlight ?? 'neutral'])}>
+        {value}
+      </p>
+      {subtext && <p className="text-xs text-[#71717A] mt-1.5 font-medium">{subtext}</p>}
+    </div>
+  );
+}
+
+// ─── Tool Row ────────────────────────────────────────────────────────────────
+
+function ToolBreakdownRow({ rec }: { rec: ToolRecommendation }) {
+  const hasSavings = rec.monthlySavings > 0;
+  const optimizedCost = rec.currentMonthlySpend - rec.monthlySavings;
+
+  return (
+    <div className="border-b border-[#1E1E21] last:border-b-0 p-4 hover:bg-[#111113] transition-colors">
+      <div className="w-full flex items-center justify-between gap-4">
+        {/* Left side: Logo + Name */}
+        <div className="flex items-center gap-3 min-w-0 w-[200px] flex-shrink-0">
+          <ToolLogo toolId={rec.toolId} size={20} className="flex-shrink-0 opacity-80" />
+          <div className="min-w-0">
+            <span className="block text-sm text-[#FAFAFA] font-medium truncate">{rec.toolName}</span>
+            <span className="block text-[11px] text-[#71717A] truncate mt-0.5">{rec.currentPlan}</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
-          {hasSavings && (
-            <div className="text-right">
-              <p className="text-sm font-mono font-bold text-[#22C55E]">{fmt(rec.monthlySavings)}/mo</p>
-              <p className="text-xs text-[#71717A]">{fmt(rec.annualSavings)}/yr</p>
-            </div>
-          )}
-          <span className={cn('text-xs font-medium px-2 py-1 rounded border', ACTION_COLORS[rec.recommendedAction] ?? ACTION_COLORS.keep)}>
+
+        {/* Center: The Ledger (Current -> Optimized -> Savings) */}
+        <div className="hidden sm:flex flex-1 items-center justify-end gap-10">
+          <div className="w-20 text-right">
+            <span className="text-sm mono-num text-[#A1A1AA]">{fmt(rec.currentMonthlySpend)}</span>
+          </div>
+          
+          <ArrowDownRight className="w-3.5 h-3.5 text-[#3F3F46] flex-shrink-0 opacity-50" />
+          
+          <div className="w-20 text-right">
+            <span className={cn(
+              "text-sm mono-num font-medium",
+              hasSavings ? "text-[#FAFAFA]" : "text-[#71717A]"
+            )}>
+              {fmt(optimizedCost)}
+            </span>
+          </div>
+          
+          <div className="w-24 text-right">
+            <span className={cn(
+              'text-sm mono-num font-medium',
+              hasSavings ? 'text-[#10B981]' : 'text-[#3F3F46]'
+            )}>
+              {hasSavings ? `-${fmt(rec.monthlySavings)}` : '--'}
+            </span>
+          </div>
+        </div>
+
+        {/* Right side: Action Tag */}
+        <div className="w-24 flex justify-end flex-shrink-0">
+          <span className={cn(
+            'text-[10px] font-medium px-2 py-0.5 rounded uppercase tracking-wider',
+              rec.recommendedAction === 'keep'
+              ? 'text-[#71717A] bg-[#18181B] border border-[#27272A]'
+              : rec.recommendedAction === 'cancel'
+                ? 'text-[#EF4444] bg-[#EF4444]/10 border border-[#EF4444]/20'
+                : 'text-[#10B981] bg-[#10B981]/10 border border-[#10B981]/20'
+          )}>
             {ACTION_LABELS[rec.recommendedAction]}
           </span>
         </div>
       </div>
-      <p className="text-sm text-[#A1A1AA] leading-relaxed">{rec.reasoning}</p>
-      <div className="flex items-center gap-2">
-        <div className={cn(
-          'w-1.5 h-1.5 rounded-full',
-          rec.confidence === 'high' ? 'bg-[#22C55E]' : rec.confidence === 'medium' ? 'bg-[#F59E0B]' : 'bg-[#71717A]'
-        )} />
-        <span className="text-xs text-[#52525B]">{rec.confidence} confidence</span>
-        {rec.credexRelevant && (
-          <span className="ml-auto text-xs text-[#A78BFA] bg-[#A78BFA]/10 border border-[#A78BFA]/30 px-2 py-0.5 rounded-full">
-            ✦ Credex can amplify this
-          </span>
-        )}
-      </div>
-    </motion.div>
+      
+      {/* Reasoning Sub-row */}
+      {(rec.recommendedAction !== 'keep' || rec.reasoning.length > 50) && (
+        <div className="mt-3 pl-8 sm:pl-[244px] pr-24">
+           <div className="flex items-start gap-2">
+             <div className="w-[1px] h-4 bg-[#27272A] mt-1 ml-1 flex-shrink-0" />
+             <div>
+               <p className="text-[12px] text-[#71717A] leading-relaxed">
+                 {rec.reasoning}
+               </p>
+               {rec.credexRelevant && (
+                <p className="text-[10px] text-[#3B82F6] mt-1.5 flex items-center gap-1">
+                  <span className="w-1 h-1 rounded-full bg-[#3B82F6]" />
+                  Qualifies for Credex Volume Discount
+                </p>
+               )}
+             </div>
+           </div>
+        </div>
+      )}
+    </div>
   );
 }
 
-function OverlapCard({ overlap }: { overlap: OverlapWarning }) {
+// ─── Overlap callout ─────────────────────────────────────────────────────────
+
+function OverlapCallout({ overlap }: { overlap: OverlapWarning }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="border border-[#27272A] rounded-xl p-5 space-y-3 bg-[#18181B]"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-[#F59E0B] flex-shrink-0" />
-          <p className="text-sm font-semibold text-[#FAFAFA]">{overlap.toolNames.join(' + ')}</p>
+    <div className="relative overflow-hidden bg-[#111113] border border-[#1E1E21] rounded-xl p-5 shadow-sm">
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#EF4444] to-transparent opacity-40" />
+      <div className="flex items-start gap-4">
+        <div className="w-8 h-8 rounded-full bg-[#EF4444]/10 flex items-center justify-center flex-shrink-0">
+          <AlertTriangle className="w-4 h-4 text-[#EF4444]" />
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-sm font-mono font-semibold text-[#F59E0B]">~{fmt(overlap.estimatedWaste)}/mo</span>
-          <span className={cn('text-xs font-medium px-2 py-1 rounded border', SEVERITY_COLORS[overlap.severity])}>
-            {overlap.severity}
-          </span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3 mb-1">
+            <h4 className="text-sm text-[#FAFAFA] font-medium">{overlap.toolNames.join(' & ')}</h4>
+            <span className="text-[11px] mono-num font-medium text-[#EF4444] bg-[#EF4444]/10 px-2 py-0.5 rounded">
+              Est. Waste: {fmt(overlap.estimatedWaste)}/mo
+            </span>
+          </div>
+          <p className="text-xs text-[#71717A] leading-relaxed">{overlap.suggestedAction}</p>
         </div>
       </div>
-      <p className="text-sm text-[#A1A1AA] leading-relaxed">{overlap.description}</p>
-      <div className="p-3 rounded-lg bg-[#27272A] border border-[#3F3F46]">
-        <p className="text-xs font-medium text-[#71717A] uppercase tracking-wider mb-1">Suggested action</p>
-        <p className="text-sm text-[#FAFAFA]">{overlap.suggestedAction}</p>
-      </div>
-    </motion.div>
+    </div>
   );
 }
+
+// ─── Main ────────────────────────────────────────────────────────────────────
 
 export function AuditResultClient() {
   const params = useParams();
@@ -155,36 +216,30 @@ export function AuditResultClient() {
       .catch(() => setNotFound(true));
   }, [token]);
 
-  useEffect(() => {
-    if (data?.result && data.result.totalMonthlySavings > 1000) {
-      // Fire confetti from the bottom center
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.8 },
-        colors: ['#22C55E', '#A78BFA', '#FAFAFA'],
-      });
-    }
-  }, [data]);
-
   const animatedSavings = useCountUp(data?.result.totalMonthlySavings ?? 0);
+
+  // Chart data: per-tool before/after comparison
+  const chartData = useMemo(() => {
+    if (!data) return [];
+    return data.result.recommendations
+      .filter(r => r.currentMonthlySpend > 0)
+      .map(r => ({
+        name: r.toolName,
+        current: r.currentMonthlySpend,
+        optimized: r.currentMonthlySpend - r.monthlySavings,
+      }));
+  }, [data]);
 
   async function copyLink() {
     const url = window.location.href;
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: 'SpendLens AI Audit',
-          text: 'Check out my AI spend optimization results:',
-          url,
-        });
+        await navigator.share({ title: 'SpendLens Audit', url });
         return;
       } catch (err) {
-        // If user cancelled, just return. If error, fall back to clipboard
         if ((err as Error).name === 'AbortError') return;
       }
     }
-
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -194,12 +249,11 @@ export function AuditResultClient() {
   if (notFound) {
     return (
       <div className="min-h-screen bg-[#09090B] flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <p className="text-4xl">🔍</p>
-          <p className="text-lg font-semibold text-[#FAFAFA]">Audit not found</p>
-          <p className="text-sm text-[#71717A]">This link may have expired or is invalid.</p>
-          <Link href="/" className="inline-flex items-center gap-2 text-sm text-[#22C55E] hover:underline">
-            <ArrowLeft className="w-4 h-4" /> Run a new audit
+        <div className="text-center space-y-3">
+          <p className="text-sm font-medium text-[#FAFAFA]">Audit not found</p>
+          <p className="text-xs text-[#52525B]">This link may have expired or is invalid.</p>
+          <Link href="/" className="inline-flex items-center gap-2 text-xs text-[#71717A] hover:text-[#A1A1AA]">
+            <ArrowLeft className="w-3 h-3" /> Run a new audit
           </Link>
         </div>
       </div>
@@ -208,141 +262,223 @@ export function AuditResultClient() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-[#09090B] dot-grid-bg flex items-center justify-center">
+      <div className="min-h-screen bg-[#09090B] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-2 border-[#22C55E] border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-[#71717A]">Loading your audit...</p>
+          <div className="w-6 h-6 border-2 border-[#27272A] border-t-[#FAFAFA] rounded-full animate-spin" />
+          <p className="text-xs text-[#52525B]">Loading audit...</p>
         </div>
       </div>
     );
   }
 
   const { result, aiSummary } = data;
-  const hasIssues = result.totalMonthlySavings > 0 || result.overlaps.length > 0;
-  const actionableRecs = result.recommendations.filter(r => r.recommendedAction !== 'keep');
-  const keepRecs = result.recommendations.filter(r => r.recommendedAction === 'keep');
+  const optimizedSpend = result.totalCurrentSpend - result.totalMonthlySavings;
 
   return (
-    <div className="min-h-screen bg-[#09090B] dot-grid-bg">
-      <nav className="sticky top-0 z-50 border-b border-[#27272A] bg-[#09090B]/80 backdrop-blur-md">
-        <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <ArrowLeft className="w-4 h-4 text-[#71717A]" />
-            <span className="font-bold text-[#FAFAFA]">Spend<span className="text-[#22C55E]">Lens</span></span>
+    <div className="min-h-screen bg-[#09090B]">
+      {/* Nav */}
+      <nav className="sticky top-0 z-50 border-b border-[#1E1E21] bg-[#09090B]/90 backdrop-blur-sm">
+        <div className="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 text-xs text-[#52525B] hover:text-[#A1A1AA] transition-colors">
+            <ArrowLeft className="w-3 h-3" />
+            <span className="font-semibold text-[#FAFAFA] text-sm">SpendLens</span>
           </Link>
           <button
             onClick={copyLink}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
-              bg-[#27272A] border border-[#3F3F46] text-[#A1A1AA]
-              hover:bg-[#3F3F46] hover:text-[#FAFAFA] transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-medium
+              bg-[#111113] border border-[#1E1E21] text-[#52525B]
+              hover:border-[#27272A] hover:text-[#A1A1AA] transition-colors"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-[#22C55E]" /> : <Copy className="w-3.5 h-3.5" />}
-            {copied ? 'Copied!' : 'Share audit'}
+            {copied ? <Check className="w-3 h-3 text-[#22C55E]" /> : <Copy className="w-3 h-3" />}
+            {copied ? 'Copied' : 'Share'}
           </button>
         </div>
       </nav>
 
-      <main className="max-w-3xl mx-auto px-4 py-10 space-y-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-3">
-          {hasIssues ? (
-            <>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full
-                bg-[#22C55E]/10 border border-[#22C55E]/30 text-xs font-medium text-[#22C55E] mb-2">
-                <TrendingDown className="w-3.5 h-3.5" />
-                {result.savingsTier === 'high' ? 'Significant savings found' :
-                 result.savingsTier === 'moderate' ? 'Moderate savings found' : 'Some savings found'}
-              </div>
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight gradient-text">
-                {fmt(animatedSavings)}<span className="text-2xl font-normal text-[#71717A]">/mo</span>
-              </h1>
-              <p className="text-[#A1A1AA]">
-                {fmt(result.totalAnnualSavings)}/yr · {result.savingsPercentage}% of {fmt(result.totalCurrentSpend)}/mo
-              </p>
-            </>
-          ) : (
-            <>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full
-                bg-[#27272A] border border-[#3F3F46] text-xs font-medium text-[#71717A] mb-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#22C55E]" />
-                Stack looks optimized
-              </div>
-              <h1 className="text-4xl font-bold text-[#FAFAFA]">You&apos;re in good shape</h1>
-              <p className="text-[#A1A1AA]">No major savings found. Current spend: {fmt(result.totalCurrentSpend)}/mo.</p>
-            </>
-          )}
+      <main className="max-w-4xl mx-auto px-4 py-10 space-y-8">
+        {/* KPI Strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="grid grid-cols-3 gap-3"
+        >
+          <KpiCard
+            label="Current spend"
+            value={`${fmt(result.totalCurrentSpend)}/mo`}
+            subtext={`${fmt(result.totalCurrentSpend * 12)}/yr`}
+          />
+          <KpiCard
+            label="Optimized spend"
+            value={`${fmt(optimizedSpend)}/mo`}
+            subtext={`${fmt(optimizedSpend * 12)}/yr`}
+          />
+          <KpiCard
+            label="Total savings"
+            value={`${fmt(animatedSavings)}/mo`}
+            subtext={`${result.savingsPercentage}% reduction`}
+            highlight="green"
+          />
         </motion.div>
 
+        {/* Executive Summary (AI) */}
         {aiSummary && (
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            className="p-5 rounded-xl border border-[#27272A] bg-[#18181B] space-y-2">
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#71717A] uppercase tracking-wider">
-              <Zap className="w-3.5 h-3.5 text-[#A78BFA]" />
-              AI Analysis
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="relative overflow-hidden bg-gradient-to-b from-[#111113] to-[#09090B] border border-[#1E1E21] rounded-xl p-6 shadow-sm"
+          >
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent opacity-40" />
+            <div className="flex items-start gap-4">
+               <div className="w-8 h-8 rounded-full bg-[#3B82F6]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                 <span className="text-[14px]">💡</span>
+               </div>
+               <div>
+                 <p className="text-[11px] text-[#A1A1AA] uppercase tracking-wider mb-2 font-medium">Executive Briefing</p>
+                 <p className="text-[14px] text-[#FAFAFA] leading-relaxed font-medium">
+                   {aiSummary}
+                 </p>
+               </div>
             </div>
-            <p className="text-sm text-[#FAFAFA] leading-relaxed">{aiSummary}</p>
           </motion.div>
         )}
 
+        {/* Spend comparison chart */}
+        {chartData.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-gradient-to-b from-[#111113] to-[#09090B] border border-[#1E1E21] rounded-xl p-6 shadow-sm"
+          >
+            <p className="text-[11px] text-[#A1A1AA] uppercase tracking-wider mb-6 font-medium flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#3B82F6]" /> Current Spend
+              <span className="text-[#3F3F46]">vs</span>
+              <span className="w-2 h-2 rounded-full bg-[#10B981]" /> Optimized
+            </p>
+            <div className="h-[220px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} barGap={2} barCategoryGap="25%">
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#52525B', fontSize: 11 }}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#3F3F46', fontSize: 10 }}
+                    tickFormatter={(v: number) => `$${v}`}
+                    width={50}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#18181B',
+                      border: '1px solid #27272A',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      color: '#FAFAFA',
+                    }}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    formatter={((value: any, name: string) => [
+                      `$${Math.round(Number(value))}`,
+                      name === 'current' ? 'Current' : 'Optimized',
+                    ]) as any}
+                    cursor={{ fill: 'rgba(255,255,255,0.02)' }}
+                  />
+                  <Bar dataKey="current" radius={[4, 4, 0, 0]} maxBarSize={36}>
+                    {chartData.map((_, i) => (
+                      <Cell key={i} fill="#3B82F6" fillOpacity={0.8} />
+                    ))}
+                  </Bar>
+                  <Bar dataKey="optimized" radius={[4, 4, 0, 0]} maxBarSize={36}>
+                    {chartData.map((entry, i) => (
+                      <Cell
+                        key={i}
+                        fill={entry.optimized < entry.current ? '#10B981' : '#3F3F46'}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Overlaps */}
         {result.overlaps.length > 0 && (
-          <section className="space-y-3">
-            <h2 className="text-xs font-semibold text-[#71717A] uppercase tracking-widest">
-              Tool Overlaps ({result.overlaps.length})
-            </h2>
-            {result.overlaps.map((overlap, i) => <OverlapCard key={i} overlap={overlap} />)}
-          </section>
-        )}
-
-        {actionableRecs.length > 0 && (
-          <section className="space-y-3">
-            <h2 className="text-xs font-semibold text-[#71717A] uppercase tracking-widest">
-              Recommendations ({actionableRecs.length})
-            </h2>
-            {actionableRecs.map(rec => <RecommendationCard key={rec.toolId} rec={rec} />)}
-          </section>
-        )}
-
-        {keepRecs.length > 0 && (
-          <section className="space-y-3">
-            <h2 className="text-xs font-semibold text-[#71717A] uppercase tracking-widest">No changes needed</h2>
-            <div className="border border-[#27272A] rounded-xl divide-y divide-[#27272A]">
-              {keepRecs.map(rec => {
-                const tool = TOOLS[rec.toolId];
-                return (
-                  <div key={rec.toolId} className="flex items-center justify-between px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm">{tool?.icon}</span>
-                      <span className="text-sm text-[#A1A1AA]">{rec.toolName}</span>
-                      <span className="text-xs text-[#52525B]">· {rec.currentPlan}</span>
-                    </div>
-                    <CheckCircle2 className="w-4 h-4 text-[#22C55E]" />
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        )}
-
-        {hasIssues && (
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-            className="p-6 rounded-xl border border-[#A78BFA]/30 bg-[#A78BFA]/5 space-y-4">
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-[#FAFAFA]">Want to save more with Credex?</p>
-              <p className="text-sm text-[#A1A1AA]">
-                Credex helps startups source discounted AI API credits — typically 15–30% below retail.
-                If you&apos;re spending on Anthropic or OpenAI APIs, we can help you save immediately.
-              </p>
-            </div>
-            <a href="https://credex.in" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold
-                bg-[#A78BFA] hover:bg-[#9333EA] text-white transition-colors">
-              Talk to Credex <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="space-y-2"
+          >
+            <p className="text-[11px] text-[#52525B] uppercase tracking-wider mb-1">
+              Overlapping tools
+            </p>
+            {result.overlaps.map((overlap, i) => (
+              <OverlapCallout key={i} overlap={overlap} />
+            ))}
           </motion.div>
         )}
 
+        {/* Tool breakdown table */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[11px] text-[#52525B] uppercase tracking-wider">
+              Per-tool breakdown
+            </p>
+            <div className="hidden sm:flex items-center gap-8 text-[10px] text-[#3F3F46] uppercase tracking-wider pr-16">
+              <span className="w-20 text-right">Current</span>
+              <span className="w-3" />
+              <span className="w-20 text-right">Optimized</span>
+              <span className="w-20 text-right">Savings</span>
+            </div>
+          </div>
+          <div className="bg-[#111113] border border-[#1E1E21] rounded-lg overflow-hidden">
+            {result.recommendations.map(rec => (
+              <ToolBreakdownRow key={rec.toolId} rec={rec} />
+            ))}
+          </div>
+        </motion.div>
+
+
+
+        {/* Credex CTA — minimal */}
+        {result.totalMonthlySavings > 0 && (
+          <div className="flex items-center justify-between py-3 px-4 rounded-md bg-[#111113] border border-[#1E1E21]">
+            <p className="text-xs text-[#52525B]">
+              Credex offers 15-30% off AI API credits for qualifying teams.
+            </p>
+            <a
+              href="https://credex.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-xs text-[#71717A] hover:text-[#FAFAFA] transition-colors flex-shrink-0"
+            >
+              Learn more <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        )}
+
+        {/* Lead Capture */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <LeadCapture token={token} totalSavings={result.totalMonthlySavings} />
+        </motion.div>
+
+        {/* Footer link */}
         <div className="text-center pb-8">
-          <Link href="/#audit" className="text-sm text-[#71717A] hover:text-[#A1A1AA] transition-colors">
-            ← Run another audit
+          <Link href="/#audit" className="text-xs text-[#3F3F46] hover:text-[#71717A] transition-colors">
+            Run another audit
           </Link>
         </div>
       </main>

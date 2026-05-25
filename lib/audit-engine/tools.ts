@@ -30,52 +30,44 @@ export const TOOL_IDS: ToolId[] = [
   'windsurf',
 ];
 
-export const TOOLS: Record<ToolId, { name: string; icon: string; category: string; description: string }> = {
+export const TOOLS: Record<ToolId, { name: string; category: string; description: string }> = {
   cursor: {
     name: 'Cursor',
-    icon: '⌨️',
     category: 'IDE / Code Editor',
     description: 'AI-first code editor with Composer, multi-file editing, and agent mode',
   },
   github_copilot: {
     name: 'GitHub Copilot',
-    icon: '🤖',
     category: 'Code Completion',
     description: 'AI pair programmer integrated into VS Code, JetBrains, and more',
   },
   claude: {
     name: 'Claude',
-    icon: '🧠',
     category: 'General AI Assistant',
     description: 'Anthropic\'s conversational AI — strong at writing, coding, and analysis',
   },
   chatgpt: {
     name: 'ChatGPT',
-    icon: '💬',
     category: 'General AI Assistant',
     description: 'OpenAI\'s flagship chat interface with GPT-4o, DALL-E, and custom GPTs',
   },
   anthropic_api: {
     name: 'Anthropic API',
-    icon: '🔌',
     category: 'API Access',
     description: 'Direct programmatic access to Claude models — pay per token',
   },
   openai_api: {
     name: 'OpenAI API',
-    icon: '🔌',
     category: 'API Access',
     description: 'Direct programmatic access to GPT-4o and other OpenAI models — pay per token',
   },
   gemini: {
     name: 'Gemini',
-    icon: '✨',
     category: 'General AI Assistant',
     description: 'Google\'s multimodal AI with deep Workspace integration',
   },
   windsurf: {
     name: 'Windsurf',
-    icon: '🏄',
     category: 'IDE / Code Editor',
     description: 'Codeium\'s AI-powered IDE with Cascade agentic coding',
   },

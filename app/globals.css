@@ -5,65 +5,54 @@
 @tailwind utilities;
 
 /* ================================================================
-   SPENDLENS — Financial Terminal Design Tokens
-   Inspired by Bloomberg Terminal × Vercel Dashboard × Linear
+   SPENDLENS — Design System
+   Linear × Vercel × Raycast inspired
    ================================================================ */
 
 @layer base {
   :root {
-    /* shadcn/ui required vars (dark mode always-on) */
-    --background: 240 6% 4%;          /* #09090B zinc-950 */
-    --foreground: 0 0% 98%;           /* #FAFAFA */
-    --card: 240 4% 10%;               /* #18181B zinc-900 */
+    --background: 240 6% 4%;
+    --foreground: 0 0% 98%;
+    --card: 240 4% 10%;
     --card-foreground: 0 0% 98%;
     --popover: 240 4% 10%;
     --popover-foreground: 0 0% 98%;
-    --primary: 142 71% 45%;           /* green-500 accent */
-    --primary-foreground: 0 0% 0%;
-    --secondary: 240 4% 16%;          /* zinc-800 */
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 6% 4%;
+    --secondary: 240 4% 16%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 4% 16%;
-    --muted-foreground: 240 4% 63%;   /* zinc-400 */
+    --muted-foreground: 240 4% 63%;
     --accent: 240 4% 16%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 16%;             /* zinc-800 */
+    --border: 240 4% 16%;
     --input: 240 4% 16%;
-    --ring: 142 71% 45%;
+    --ring: 0 0% 98%;
     --radius: 0.5rem;
 
-    /* ── SpendLens Custom Design Tokens ── */
-
-    /* Backgrounds */
+    /* SpendLens tokens */
     --bg-primary: #09090B;
-    --bg-secondary: #18181B;
-    --bg-tertiary: #27272A;
-    --bg-elevated: #3F3F46;
+    --bg-secondary: #111113;
+    --bg-card: #18181B;
+    --bg-elevated: #27272A;
 
-    /* Text */
     --text-primary: #FAFAFA;
     --text-secondary: #A1A1AA;
     --text-muted: #71717A;
+    --text-dimmed: #52525B;
 
-    /* Accents */
-    --accent-green: #22C55E;
-    --accent-green-bright: #4ADE80;
-    --accent-red: #EF4444;
-    --accent-amber: #F59E0B;
-    --accent-blue: #3B82F6;
-    --accent-purple: #A855F7;
-
-    /* Borders */
-    --border-default: #27272A;
+    --border-default: #1E1E21;
+    --border-subtle: #27272A;
     --border-hover: #3F3F46;
 
-    /* Shadows */
-    --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.05);
-    --shadow-elevated: 0 8px 30px rgba(0, 0, 0, 0.5);
+    --green: #22C55E;
+    --red: #EF4444;
+    --amber: #F59E0B;
+    --blue: #3B82F6;
   }
 
-  /* Always dark — no light mode toggle for this product */
   .dark {
     --background: 240 6% 4%;
     --foreground: 0 0% 98%;
@@ -71,8 +60,8 @@
     --card-foreground: 0 0% 98%;
     --popover: 240 4% 10%;
     --popover-foreground: 0 0% 98%;
-    --primary: 142 71% 45%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 6% 4%;
     --secondary: 240 4% 16%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 4% 16%;
@@ -83,7 +72,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 240 4% 16%;
     --input: 240 4% 16%;
-    --ring: 142 71% 45%;
+    --ring: 0 0% 98%;
   }
 }
 
@@ -105,81 +94,63 @@
   }
 }
 
-/* ── Dot grid background pattern ── */
-.dot-grid-bg {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-/* ── Gradient text utility ── */
+/* Gradient heading — subtle white→gray */
 .gradient-text {
-  background: linear-gradient(to bottom, #ffffff, #71717A);
+  background: linear-gradient(to bottom, #FAFAFA, #52525B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.gradient-text-green {
-  background: linear-gradient(135deg, #4ADE80, #22C55E);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* Monospaced tabular numbers for financial data */
+.mono-num {
+  font-family: 'Geist Mono', 'SF Mono', 'Fira Code', monospace;
+  font-variant-numeric: tabular-nums;
 }
 
-/* ── Glass morphism card ── */
-.glass-card {
-  background: rgba(24, 24, 27, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: var(--shadow-card);
-}
-
-/* ── Savings bar animation ── */
-.savings-bar {
-  transition: width 1s ease-out;
-}
-
-/* ── Credex CTA pulse ── */
-@keyframes credex-pulse {
-  0%, 100% { border-color: #A855F7; box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.1); }
-  50% { border-color: #C084FC; box-shadow: 0 0 12px rgba(168, 85, 247, 0.25); }
-}
-
-.credex-pulse {
-  animation: credex-pulse 2.5s ease-in-out infinite;
-}
-
-/* ── Skeleton loading animation ── */
-@keyframes skeleton-shimmer {
+/* Skeleton loading */
+@keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--bg-tertiary) 25%,
-    var(--bg-elevated) 50%,
-    var(--bg-tertiary) 75%
-  );
+  background: linear-gradient(90deg, #18181B 25%, #27272A 50%, #18181B 75%);
   background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
+  animation: shimmer 1.5s infinite;
   border-radius: 4px;
 }
 
-/* ── Form card hover ── */
+/* Form card hover */
 .tool-card {
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
-
 .tool-card:hover {
   border-color: var(--border-hover);
-  background-color: var(--bg-tertiary);
 }
 
-/* ── Print styles for PDF export (Day 6) ── */
+/* Savings bar width transition */
+.savings-bar {
+  transition: width 1s ease-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3F3F46;
+}
+
+/* Print */
 @media print {
   .no-print { display: none !important; }
   body { background: white !important; color: black !important; }
-  .savings-number { color: #22C55E !important; }
 }

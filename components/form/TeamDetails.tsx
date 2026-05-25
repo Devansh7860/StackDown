@@ -2,6 +2,8 @@
 
 import { cn } from '@/lib/utils';
 import type { UseCase } from '@/lib/audit-engine/types';
+import { Terminal, PenTool, BarChart3, Microscope, Shuffle } from 'lucide-react';
+import type { ReactNode } from 'react';
 
 interface TeamDetailsProps {
   teamSize: number;
@@ -10,12 +12,12 @@ interface TeamDetailsProps {
   onUseCaseChange: (useCase: UseCase) => void;
 }
 
-const USE_CASES: { id: UseCase; label: string; icon: string; desc: string }[] = [
-  { id: 'coding', label: 'Coding', icon: '💻', desc: 'Software development, code review, debugging' },
-  { id: 'writing', label: 'Writing', icon: '✍️', desc: 'Content creation, docs, marketing copy' },
-  { id: 'data', label: 'Data', icon: '📊', desc: 'Analysis, SQL, spreadsheets, reporting' },
-  { id: 'research', label: 'Research', icon: '🔬', desc: 'Literature review, competitive analysis' },
-  { id: 'mixed', label: 'Mixed', icon: '🔀', desc: 'Across multiple categories' },
+const USE_CASES: { id: UseCase; label: string; icon: ReactNode; desc: string }[] = [
+  { id: 'coding', label: 'Coding', icon: <Terminal className="w-5 h-5" />, desc: 'Software development, code review, debugging' },
+  { id: 'writing', label: 'Writing', icon: <PenTool className="w-5 h-5" />, desc: 'Content creation, docs, marketing copy' },
+  { id: 'data', label: 'Data', icon: <BarChart3 className="w-5 h-5" />, desc: 'Analysis, SQL, spreadsheets, reporting' },
+  { id: 'research', label: 'Research', icon: <Microscope className="w-5 h-5" />, desc: 'Literature review, competitive analysis' },
+  { id: 'mixed', label: 'Mixed', icon: <Shuffle className="w-5 h-5" />, desc: 'Across multiple categories' },
 ];
 
 export function TeamDetails({
@@ -52,8 +54,8 @@ export function TeamDetails({
             value={teamSize || ''}
             placeholder="e.g. 8"
             onChange={(e) => onTeamSizeChange(Math.max(1, parseInt(e.target.value) || 1))}
-            className="w-32 bg-[#27272A] border border-[#3F3F46] rounded-md px-3 py-2 text-sm
-              text-[#FAFAFA] focus:outline-none focus:ring-1 focus:ring-[#22C55E] focus:border-[#22C55E]
+            className="w-32 bg-[#111113] border border-[#27272A] rounded-md px-3 py-2 text-sm
+              text-[#FAFAFA] focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]
               transition-colors font-mono"
           />
           <span className="text-sm text-[#71717A]">people</span>
@@ -68,26 +70,29 @@ export function TeamDetails({
         <label className="block text-sm font-medium text-[#A1A1AA] mb-3">
           What is your team's primary use for AI tools?
         </label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {USE_CASES.map(({ id, label, icon, desc }) => {
             const isSelected = useCase === id;
             return (
-              <button
+               <button
                 key={id}
                 type="button"
                 id={`use-case-${id}`}
                 onClick={() => onUseCaseChange(id)}
                 className={cn(
-                  'flex flex-col gap-1 p-3 rounded-lg border text-left transition-all duration-200',
+                  'flex flex-col gap-2 p-4 rounded-xl border text-left transition-all duration-300 relative overflow-hidden',
                   isSelected
-                    ? 'border-[#22C55E] bg-[#22C55E]/10 text-[#FAFAFA]'
-                    : 'border-[#27272A] bg-[#18181B] text-[#A1A1AA] hover:border-[#3F3F46] hover:bg-[#27272A]'
+                    ? 'border-[#3B82F6]/50 bg-[#3B82F6]/5 text-[#FAFAFA] shadow-[0_0_20px_rgba(59,130,246,0.1)]'
+                    : 'border-[#27272A] bg-[#111113] text-[#A1A1AA] hover:border-[#3F3F46] hover:bg-[#18181B]'
                 )}
                 aria-pressed={isSelected}
               >
-                <span className="text-lg">{icon}</span>
+                {isSelected && (
+                   <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent opacity-50" />
+                )}
+                <span className={cn("text-lg", isSelected ? "text-[#3B82F6]" : "text-[#71717A]")}>{icon}</span>
                 <span className="text-sm font-medium">{label}</span>
-                <span className="text-xs text-[#71717A] leading-tight">{desc}</span>
+                <span className="text-xs text-[#71717A] leading-relaxed">{desc}</span>
               </button>
             );
           })}

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ArrowRight, BarChart3, Layers, Sparkles } from 'lucide-react';
 import { AuditForm } from '@/components/form/AuditForm';
+import { Feature108 } from '@/components/ui/feature-tabs';
 import { TOOLS } from '@/lib/audit-engine/tools';
 
 export const metadata: Metadata = {
@@ -9,166 +11,170 @@ export const metadata: Metadata = {
     'Most startups overspend 20-40% on AI subscriptions. Find out in 3 minutes where your team is wasting money — free, no login required.',
 };
 
+const featureTabs = [
+  {
+    value: 'detect',
+    icon: <Layers className="h-auto w-4 shrink-0" />,
+    label: 'Detect overlaps',
+    content: {
+      badge: 'Overlap Detection',
+      title: 'Stop paying twice for the same capability.',
+      description:
+        'SpendLens cross-references your AI stack and flags tools with redundant features. Cursor + Copilot? Claude + ChatGPT? You only need one.',
+      buttonText: '',
+      imageSrc: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&q=80',
+      imageAlt: 'Data analytics dashboard showing overlapping subscriptions',
+    },
+  },
+  {
+    value: 'optimize',
+    icon: <BarChart3 className="h-auto w-4 shrink-0" />,
+    label: 'Right-size plans',
+    content: {
+      badge: 'Plan Optimization',
+      title: 'Match your plan to your actual usage.',
+      description:
+        'Team of 3 on a 5-seat minimum plan? Business tier when Pro covers your needs? We find every mismatch and show you the exact savings.',
+      buttonText: '',
+      imageSrc: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop&q=80',
+      imageAlt: 'Financial optimization dashboard',
+    },
+  },
+  {
+    value: 'save',
+    icon: <Sparkles className="h-auto w-4 shrink-0" />,
+    label: 'Save with Credex',
+    content: {
+      badge: 'Credex Integration',
+      title: 'Discounted AI API credits, 15-30% below retail.',
+      description:
+        'For teams spending on Anthropic or OpenAI APIs, Credex sources volume-discounted credits. Your audit identifies exactly where this applies.',
+      buttonText: '',
+      imageSrc: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop&q=80',
+      imageAlt: 'Cost savings visualization',
+    },
+  },
+];
+
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#09090B] dot-grid-bg">
-      {/* ── Sticky Navigation ── */}
-      <nav className="sticky top-0 z-50 border-b border-[#27272A] bg-[#09090B]/80 backdrop-blur-md">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg font-bold text-[#FAFAFA] tracking-tight">
-              Spend<span className="text-[#22C55E]">Lens</span>
+    <div className="min-h-screen bg-[#09090B]">
+      {/* Nav */}
+      <nav className="sticky top-0 z-50 border-b border-[#1E1E21] bg-[#09090B]/90 backdrop-blur-sm">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5">
+            <span className="text-sm font-semibold text-[#FAFAFA] tracking-tight">
+              SpendLens
             </span>
-            <span className="hidden sm:inline text-xs text-[#71717A] border border-[#27272A] rounded px-1.5 py-0.5">
+            <span className="text-[10px] text-[#52525B] border border-[#27272A] rounded px-1.5 py-0.5 hidden sm:inline">
               by Credex
             </span>
           </Link>
-          <Link
+          <a
             href="#audit"
-            className="text-sm font-medium px-4 py-1.5 rounded-lg
-              bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/30
-              hover:bg-[#22C55E]/20 transition-colors"
+            className="text-sm text-[#A1A1AA] hover:text-[#FAFAFA] transition-colors"
           >
-            Start Audit →
-          </Link>
+            Start audit
+          </a>
         </div>
       </nav>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6">
-        {/* ── Hero Section ── */}
-        <section className="py-16 sm:py-24 text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full
-            bg-[#18181B] border border-[#27272A] text-xs text-[#A1A1AA] mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" />
-            Free · No login required · Takes 3 minutes
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6 gradient-text">
-            Your AI tools are<br />
-            costing you more<br />
-            than they should.
-          </h1>
-
-          {/* Sub-headline */}
-          <p className="text-base sm:text-lg text-[#A1A1AA] max-w-xl mx-auto mb-10 leading-relaxed">
-            Most startups overspend{' '}
-            <strong className="text-[#FAFAFA]">20–40%</strong> on AI subscriptions.
-            Duplicate tools, oversized plans, wrong tiers.
-            Find out in 3 minutes — no email, no login.
-          </p>
-
-          {/* CTA button */}
-          <a
-            href="#audit"
-            id="hero-cta"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl
-              bg-[#22C55E] hover:bg-[#16A34A] text-black font-bold text-base
-              transition-all duration-200
-              shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_32px_rgba(34,197,94,0.5)]"
-          >
-            Start Your Free Audit
-            <span aria-hidden>→</span>
-          </a>
-
-          {/* Social proof */}
-          <blockquote className="mt-12 max-w-lg mx-auto text-left border-l-2 border-[#27272A] pl-4">
-            <p className="text-sm italic text-[#71717A] leading-relaxed">
-              &ldquo;Saved us $340/mo — we had no idea we were paying for Copilot and Cursor simultaneously.&rdquo;
+      <main className="max-w-5xl mx-auto px-4 sm:px-6">
+        {/* Hero */}
+        <section className="pt-24 pb-20 sm:pt-32 sm:pb-28">
+          <div className="max-w-2xl">
+            <p className="text-sm text-[#52525B] mb-4">Free audit / No login / 3 minutes</p>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.15] tracking-tight text-[#FAFAFA] mb-5">
+              Your team is overspending<br />
+              on AI tools.
+            </h1>
+            <p className="text-base text-[#71717A] max-w-lg mb-8 leading-relaxed">
+              Most startups waste 20-40% on duplicate subscriptions and oversized plans.
+              SpendLens finds the waste in under 3 minutes.
             </p>
-            <footer className="mt-2 text-xs text-[#52525B]">
-              — Engineering Manager, 12-person SaaS startup
-            </footer>
-          </blockquote>
-        </section>
-
-        {/* ── How It Works ── */}
-        <section className="py-12 border-t border-[#27272A]" aria-labelledby="how-it-works">
-          <h2 id="how-it-works" className="text-sm font-semibold text-[#71717A] uppercase tracking-widest text-center mb-10">
-            How It Works
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {[
-              {
-                num: '01',
-                title: 'Add your tools',
-                desc: 'Tell us what AI tools your team pays for — Cursor, Copilot, Claude, ChatGPT, and more.',
-              },
-              {
-                num: '02',
-                title: 'Get your audit',
-                desc: 'Our engine checks for plan mismatches, tool overlaps, and over-provisioned seats — with specific reasoning.',
-              },
-              {
-                num: '03',
-                title: 'Save & share',
-                desc: 'See exactly how much you can save. Share the report or book a free Credex consultation.',
-              },
-            ].map(({ num, title, desc }) => (
-              <div key={num} className="relative p-5 rounded-xl border border-[#27272A] bg-[#18181B]">
-                <div className="text-3xl font-mono font-bold text-[#3F3F46] mb-3">{num}</div>
-                <h3 className="text-sm font-semibold text-[#FAFAFA] mb-2">{title}</h3>
-                <p className="text-sm text-[#71717A] leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── Tools We Audit ── */}
-        <section className="py-12 border-t border-[#27272A]" aria-labelledby="tools-we-audit">
-          <h2 id="tools-we-audit" className="text-sm font-semibold text-[#71717A] uppercase tracking-widest text-center mb-8">
-            Tools We Audit
-          </h2>
-          <div className="flex flex-wrap justify-center gap-3">
-            {Object.values(TOOLS).map((tool) => (
-              <div
-                key={tool.name}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg
-                  bg-[#18181B] border border-[#27272A] text-sm text-[#A1A1AA]
-                  hover:border-[#3F3F46] hover:text-[#FAFAFA] transition-colors"
-              >
-                <span>{tool.icon}</span>
-                <span className="font-medium">{tool.name}</span>
-              </div>
-            ))}
-          </div>
-          <p className="text-center text-xs text-[#52525B] mt-6">
-            More tools coming soon. Request one →{' '}
-            <a href="mailto:hello@credex.in" className="text-[#71717A] hover:text-[#A1A1AA] underline">
-              hello@credex.in
+            <a
+              href="#audit"
+              id="hero-cta"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg
+                bg-[#FAFAFA] text-[#09090B] font-medium text-sm
+                hover:bg-[#E4E4E7] transition-colors"
+            >
+              Run free audit
+              <ArrowRight className="w-4 h-4" />
             </a>
-          </p>
+          </div>
         </section>
 
-        {/* ── Audit Form ── */}
-        <section id="audit" className="py-16 border-t border-[#27272A]" aria-labelledby="start-audit-heading">
-          <div className="text-center mb-10">
-            <h2 id="start-audit-heading" className="text-2xl sm:text-3xl font-bold text-[#FAFAFA] mb-3">
-              Start your free audit
-            </h2>
-            <p className="text-sm text-[#71717A]">
-              3 steps. No account. Instant results.
-            </p>
-          </div>
+        {/* Stats strip */}
+        <section className="grid grid-cols-3 gap-px bg-[#1E1E21] rounded-lg overflow-hidden mb-20">
+          {[
+            { value: '20-40%', label: 'average overspend on AI tools' },
+            { value: '$2,400', label: 'median annual savings found' },
+            { value: '3 min', label: 'to get your full audit report' },
+          ].map(({ value, label }) => (
+            <div key={label} className="bg-[#111113] p-6 text-center">
+              <p className="text-xl sm:text-2xl font-semibold text-[#FAFAFA] mono-num">{value}</p>
+              <p className="text-xs text-[#52525B] mt-1">{label}</p>
+            </div>
+          ))}
+        </section>
 
-          <AuditForm />
+        {/* Tools We Audit */}
+        <section className="pb-8 border-t border-[#1E1E21] pt-12">
+          <p className="text-xs text-[#52525B] uppercase tracking-widest text-center mb-6">
+            Tools we audit
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {Object.entries(TOOLS).map(([, tool]) => (
+              <span
+                key={tool.name}
+                className="px-3 py-1.5 rounded-md bg-[#111113] border border-[#1E1E21]
+                  text-xs text-[#71717A] font-medium"
+              >
+                {tool.name}
+              </span>
+            ))}
+          </div>
         </section>
       </main>
 
-      {/* ── Footer ── */}
-      <footer className="border-t border-[#27272A] mt-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-[#52525B]">
-            Built for startups spending $200–$10,000/mo on AI tools.{' '}
-            <span className="text-[#71717A]">Powered by Credex.</span>
+      {/* Feature tabs */}
+      <div className="border-t border-[#1E1E21]">
+        <Feature108
+          badge="How it works"
+          heading="From spend chaos to clarity in 3 steps"
+          description="Add your tools, get your audit, see exactly where to save."
+          tabs={featureTabs}
+        />
+      </div>
+
+      {/* Audit Form */}
+      <section id="audit" className="border-t border-[#1E1E21]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
+          <div className="text-center mb-10">
+            <h2 className="text-xl sm:text-2xl font-semibold text-[#FAFAFA] mb-2">
+              Start your audit
+            </h2>
+            <p className="text-sm text-[#52525B]">
+              Add your tools, review, and get instant results.
+            </p>
+          </div>
+          <AuditForm />
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-[#1E1E21]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-[#3F3F46]">
+            Built for startups spending $200-$10,000/mo on AI tools. Powered by Credex.
           </p>
-          <div className="flex items-center gap-4 text-xs text-[#52525B]">
-            <a href="https://credex.in" target="_blank" rel="noopener noreferrer" className="hover:text-[#A1A1AA] transition-colors">
+          <div className="flex items-center gap-4 text-xs text-[#3F3F46]">
+            <a href="https://credex.in" target="_blank" rel="noopener noreferrer" className="hover:text-[#71717A] transition-colors">
               Credex.in
             </a>
-            <span>·</span>
-            <a href="mailto:hello@credex.in" className="hover:text-[#A1A1AA] transition-colors">
+            <span className="text-[#27272A]">/</span>
+            <a href="mailto:hello@credex.in" className="hover:text-[#71717A] transition-colors">
               Contact
             </a>
           </div>

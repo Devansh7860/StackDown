@@ -9,7 +9,7 @@ import { TeamDetails } from './TeamDetails';
 import { ReviewStep } from './ReviewStep';
 import { useFormPersistence } from '@/hooks/useFormPersistence';
 import type { ToolId, UseCase } from '@/lib/audit-engine/types';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Minus } from 'lucide-react';
 
 interface ToolEntry {
   toolId: ToolId;
@@ -180,6 +180,10 @@ export function AuditForm() {
 
       const data = await res.json();
       clearState();
+      // Cache result in sessionStorage so results page renders without Supabase
+      try {
+        sessionStorage.setItem(`audit_${data.shareToken}`, JSON.stringify(data));
+      } catch { /* storage unavailable — results page will try Supabase */ }
       router.push(`/audit/${data.shareToken}`);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Something went wrong.';
@@ -199,15 +203,15 @@ export function AuditForm() {
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
-            className="mb-4 flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#27272A] border border-[#3F3F46] text-sm text-[#A1A1AA]"
+            className="mb-4 flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#111113] border border-[#1E1E21] text-sm text-[#71717A]"
           >
-            <span>🔄</span>
+            <Minus className="w-3 h-3" />
             <span>Previous session restored.</span>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="bg-[#18181B] border border-[#27272A] rounded-xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+      <div className="bg-[#111113] border border-[#1E1E21] rounded-xl p-6 shadow-lg">
         <StepIndicator currentStep={currentStep} />
 
         {/* Animated step content */}
@@ -248,17 +252,17 @@ export function AuditForm() {
         {/* Error messages */}
         {(errors.step1 && currentStep === 1) && (
           <p className="mt-3 text-sm text-[#EF4444] flex items-center gap-1">
-            <span>⚠️</span> {errors.step1}
+            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] flex-shrink-0" /> {errors.step1}
           </p>
         )}
         {(errors.step2 && currentStep === 2) && (
           <p className="mt-3 text-sm text-[#EF4444] flex items-center gap-1">
-            <span>⚠️</span> {errors.step2}
+            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] flex-shrink-0" /> {errors.step2}
           </p>
         )}
         {submitError && (
           <p className="mt-3 text-sm text-[#EF4444] flex items-center gap-1">
-            <span>⚠️</span> {submitError}
+            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] flex-shrink-0" /> {submitError}
           </p>
         )}
 
@@ -281,9 +285,8 @@ export function AuditForm() {
               type="button"
               id={`step${currentStep}-next-btn`}
               onClick={goNext}
-              className="px-5 py-2.5 rounded-lg bg-[#22C55E] hover:bg-[#16A34A] text-black font-semibold text-sm
-                transition-all duration-200 shadow-[0_0_16px_rgba(34,197,94,0.2)]
-                hover:shadow-[0_0_24px_rgba(34,197,94,0.35)]"
+              className="px-5 py-2.5 rounded-lg bg-[#FAFAFA] hover:bg-[#E4E4E7] text-[#09090B] font-medium text-sm
+                transition-colors"
             >
               Continue →
             </button>

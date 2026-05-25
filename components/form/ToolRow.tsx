@@ -5,6 +5,7 @@ import { Plus, X, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { TOOLS, PLANS, getPlansForTool } from '@/lib/audit-engine/tools';
 import type { ToolId } from '@/lib/audit-engine/types';
+import { ToolLogo } from '@/components/ui/tool-logo';
 
 interface ToolEntry {
   toolId: ToolId;
@@ -19,7 +20,7 @@ interface ToolRowProps {
   entry?: ToolEntry;
   onAdd: (toolId: ToolId) => void;
   onRemove: (toolId: ToolId) => void;
-  onChange: (toolId: ToolId, field: keyof ToolEntry, value: string | number | boolean) => void;
+  onChange: (toolId: ToolId, updates: Partial<ToolEntry>) => void;
 }
 
 export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowProps) {
@@ -31,31 +32,36 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
   const selectedPlan = plans.find(p => p.planId === entry?.planId);
 
   function handlePlanChange(planId: string) {
-    onChange(toolId, 'planId', planId);
     const plan = plans.find(p => p.planId === planId);
+    const seats = entry?.seats ?? 1;
+    // Batch planId + auto-spend in one call to avoid stale closure clobber
     if (plan && !entry?.overrideSpend) {
-      const seats = entry?.seats ?? 1;
-      const autoSpend = plan.pricePerSeat * seats;
-      onChange(toolId, 'monthlySpend', autoSpend);
+      onChange(toolId, { planId, monthlySpend: plan.pricePerSeat * seats });
+    } else {
+      onChange(toolId, { planId });
     }
   }
 
   function handleSeatsChange(seats: number) {
-    onChange(toolId, 'seats', seats);
     if (selectedPlan && !entry?.overrideSpend) {
-      onChange(toolId, 'monthlySpend', selectedPlan.pricePerSeat * seats);
+      onChange(toolId, { seats, monthlySpend: selectedPlan.pricePerSeat * seats });
+    } else {
+      onChange(toolId, { seats });
     }
   }
 
   return (
     <div
       className={cn(
-        'border rounded-lg transition-all duration-200',
+        'rounded-xl transition-all duration-300 relative overflow-hidden',
         isAdded
-          ? 'border-[#22C55E]/40 bg-[#18181B]'
-          : 'border-[#27272A] bg-[#18181B] hover:border-[#3F3F46]'
+          ? 'border border-[#3B82F6]/30 bg-[#3B82F6]/5 shadow-[0_0_20px_rgba(59,130,246,0.05)]'
+          : 'border border-[#27272A] bg-[#111113] hover:border-[#3F3F46] hover:bg-[#18181B]'
       )}
     >
+      {isAdded && (
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent opacity-30" />
+      )}
       {/* Tool header row */}
       <div
         className="flex items-center justify-between p-4 cursor-pointer"
@@ -66,9 +72,9 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
         }}
       >
         <div className="flex items-center gap-3">
-          <span className="text-xl">{tool.icon}</span>
+          <ToolLogo toolId={toolId} size={22} className={isAdded ? "opacity-100" : "opacity-60"} />
           <div>
-            <p className="text-sm font-medium text-[#FAFAFA]">{tool.name}</p>
+            <p className={cn("text-sm font-medium transition-colors", isAdded ? "text-[#3B82F6]" : "text-[#FAFAFA]")}>{tool.name}</p>
             <p className="text-xs text-[#71717A]">{tool.category}</p>
           </div>
         </div>
@@ -76,7 +82,7 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
         <div className="flex items-center gap-2">
           {isAdded && (
             <>
-              <span className="text-xs text-[#22C55E] font-medium hidden sm:block">
+              <span className="text-xs text-[#3B82F6] font-medium hidden sm:block">
                 {selectedPlan?.planName ?? 'Plan selected'} · ${entry.monthlySpend}/mo
               </span>
               <ChevronDown
@@ -110,8 +116,8 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                 setExpanded(true);
               }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium
-                bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/30
-                hover:bg-[#22C55E]/20 transition-colors"
+                bg-[#FAFAFA] text-[#09090B] border border-transparent
+                hover:bg-[#E4E4E7] transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
               Add
@@ -135,7 +141,7 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                 onChange={(e) => handlePlanChange(e.target.value)}
                 className="w-full bg-[#27272A] border border-[#3F3F46] rounded-md px-3 py-2 text-sm
                   text-[#FAFAFA] appearance-none cursor-pointer
-                  focus:outline-none focus:ring-1 focus:ring-[#22C55E] focus:border-[#22C55E]
+                  focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]
                   transition-colors"
               >
                 <option value="">Select plan...</option>
@@ -168,7 +174,7 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                 value={entry.seats}
                 onChange={(e) => handleSeatsChange(Math.max(1, parseInt(e.target.value) || 1))}
                 className="w-full bg-[#27272A] border border-[#3F3F46] rounded-md px-3 py-2 text-sm
-                  text-[#FAFAFA] focus:outline-none focus:ring-1 focus:ring-[#22C55E] focus:border-[#22C55E]
+                  text-[#FAFAFA] focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]
                   transition-colors"
               />
             </div>
@@ -183,12 +189,12 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                 min={0}
                 step={0.01}
                 value={entry.monthlySpend}
-                onChange={(e) => onChange(toolId, 'monthlySpend', parseFloat(e.target.value) || 0)}
+                onChange={(e) => onChange(toolId, { monthlySpend: parseFloat(e.target.value) || 0 })}
                 disabled={!entry.overrideSpend && !!selectedPlan && selectedPlan.pricePerSeat > 0}
                 className={cn(
                   'w-full bg-[#27272A] border border-[#3F3F46] rounded-md px-3 py-2 text-sm',
-                  'text-[#FAFAFA] focus:outline-none focus:ring-1 focus:ring-[#22C55E] focus:border-[#22C55E]',
-                  'transition-colors',
+                  'text-[#FAFAFA] focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]',
+                  'transition-colors font-mono',
                   !entry.overrideSpend && selectedPlan && selectedPlan.pricePerSeat > 0 && 'opacity-60 cursor-not-allowed'
                 )}
               />
@@ -202,10 +208,10 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                 type="checkbox"
                 id={`override-${toolId}`}
                 checked={entry.overrideSpend}
-                onChange={(e) => onChange(toolId, 'overrideSpend', e.target.checked)}
-                className="w-3.5 h-3.5 accent-[#22C55E]"
+                onChange={(e) => onChange(toolId, { overrideSpend: e.target.checked })}
+                className="w-3.5 h-3.5 accent-[#3B82F6]"
               />
-              <label htmlFor={`override-${toolId}`} className="text-xs text-[#71717A] cursor-pointer">
+              <label htmlFor={`override-${toolId}`} className="text-xs text-[#71717A] cursor-pointer hover:text-[#A1A1AA] transition-colors">
                 Override — I pay a different amount
                 {!entry.overrideSpend && (
                   <span className="ml-1 text-[#A1A1AA]">

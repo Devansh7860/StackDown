@@ -38,12 +38,11 @@ export function ToolSelector({ tools, onChange }: ToolSelectorProps) {
 
   function handleChange(
     toolId: ToolId,
-    field: keyof ToolEntry,
-    value: string | number | boolean
+    updates: Partial<ToolEntry>
   ) {
     onChange(
       tools.map(t =>
-        t.toolId === toolId ? { ...t, [field]: value } : t
+        t.toolId === toolId ? { ...t, ...updates } : t
       )
     );
   }
@@ -75,20 +74,22 @@ export function ToolSelector({ tools, onChange }: ToolSelectorProps) {
       {/* Running total */}
       {tools.length > 0 && (
         <div className={cn(
-          'flex items-center justify-between p-3 rounded-lg',
-          'border border-[#3F3F46] bg-[#27272A]'
+          'flex items-center justify-between p-4 rounded-xl mt-4',
+          'border border-[#1E1E21] bg-gradient-to-r from-[#111113] to-[#09090B] shadow-sm'
         )}>
-          <div className="flex items-center gap-2 text-sm text-[#A1A1AA]">
-            <DollarSign className="w-4 h-4 text-[#71717A]" />
-            <span>
+          <div className="flex items-center gap-3 text-sm text-[#A1A1AA]">
+            <div className="w-8 h-8 rounded-full bg-[#FAFAFA]/5 flex items-center justify-center">
+              <DollarSign className="w-4 h-4 text-[#A1A1AA]" />
+            </div>
+            <span className="font-medium text-[#FAFAFA]">
               {tools.length} tool{tools.length !== 1 ? 's' : ''} tracked
             </span>
           </div>
           <div className="text-right">
-            <span className="text-sm font-mono font-semibold text-[#FAFAFA]">
+            <span className="text-xl font-mono font-semibold text-[#FAFAFA] tracking-tight">
               ${totalMonthlySpend.toLocaleString()}
             </span>
-            <span className="text-xs text-[#71717A] ml-1">/mo</span>
+            <span className="text-xs text-[#71717A] ml-1 font-medium">/mo</span>
           </div>
         </div>
       )}

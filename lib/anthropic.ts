@@ -15,14 +15,14 @@ function buildPrompt(result: AuditResult, input: AuditInput): string {
     .map(r => `${r.toolName}: ${r.recommendedAction}, save $${Math.round(r.monthlySavings)}/mo`)
     .join('; ');
 
-  return `You are a financial analyst reviewing an AI tool spend audit for a ${input.teamSize}-person team focused on ${input.useCase}.
+  return `You are a highly analytical fractional CFO reviewing an AI tool spend audit for a ${input.teamSize}-person team focused on ${input.useCase}.
 
 Their current stack: ${toolList}
 Total current spend: $${Math.round(result.totalCurrentSpend)}/mo
-Key recommendations: ${recs || 'stack looks optimized'}
+Key actionable insights: ${recs || 'Stack is perfectly right-sized.'}
 Total potential savings: $${Math.round(result.totalMonthlySavings)}/mo (${result.savingsPercentage}%)
 
-Write a 2-3 sentence personalized audit summary. Be direct and specific — include actual dollar amounts. Sound like a financial advisor, not a chatbot. Do not use bullet points or headers.`;
+Write a concise, 2-3 sentence personalized executive summary. Be extremely direct. State the most financially impactful change they must make immediately (e.g., 'Cancel Tool X in favor of Tool Y' or 'Downgrade 5 seats of Tool Z'). Sound like a rigorous financial advisor. Do not use bullet points, conversational filler, or headers. Use exact dollar amounts.`;
 }
 
 function fallbackSummary(result: AuditResult, input: AuditInput): string {
