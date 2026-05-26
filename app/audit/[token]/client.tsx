@@ -277,21 +277,31 @@ export function AuditResultClient() {
   return (
     <div className="min-h-screen bg-[#09090B]">
       {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-[#1E1E21] bg-[#09090B]/90 backdrop-blur-sm">
+      <nav className="no-print sticky top-0 z-50 border-b border-[#1E1E21] bg-[#09090B]/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-xs text-[#52525B] hover:text-[#A1A1AA] transition-colors">
             <ArrowLeft className="w-3 h-3" />
             <span className="font-semibold text-[#FAFAFA] text-sm">SpendLens</span>
           </Link>
-          <button
-            onClick={copyLink}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-medium
-              bg-[#111113] border border-[#1E1E21] text-[#52525B]
-              hover:border-[#27272A] hover:text-[#A1A1AA] transition-colors"
-          >
-            {copied ? <Check className="w-3 h-3 text-[#22C55E]" /> : <Copy className="w-3 h-3" />}
-            {copied ? 'Copied' : 'Share'}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => window.print()}
+              className="no-print flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-medium
+                bg-[#111113] border border-[#1E1E21] text-[#52525B]
+                hover:border-[#27272A] hover:text-[#A1A1AA] transition-colors"
+            >
+              Download PDF
+            </button>
+            <button
+              onClick={copyLink}
+              className="no-print flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-medium
+                bg-[#111113] border border-[#1E1E21] text-[#52525B]
+                hover:border-[#27272A] hover:text-[#A1A1AA] transition-colors"
+            >
+              {copied ? <Check className="w-3 h-3 text-[#22C55E]" /> : <Copy className="w-3 h-3" />}
+              {copied ? 'Copied' : 'Share'}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -330,8 +340,8 @@ export function AuditResultClient() {
           >
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent opacity-40" />
             <div className="flex items-start gap-4">
-               <div className="w-8 h-8 rounded-full bg-[#3B82F6]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                 <span className="text-[14px]">💡</span>
+               <div className="w-8 h-8 rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                 <span className="w-2 h-2 rounded-full bg-[#3B82F6]" />
                </div>
                <div>
                  <p className="text-[11px] text-[#A1A1AA] uppercase tracking-wider mb-2 font-medium">Executive Briefing</p>
@@ -356,8 +366,8 @@ export function AuditResultClient() {
               <span className="text-[#3F3F46]">vs</span>
               <span className="w-2 h-2 rounded-full bg-[#10B981]" /> Optimized
             </p>
-            <div className="h-[220px]">
-              <ResponsiveContainer width="100%" height="100%">
+            <div className="h-[220px] min-h-[220px]" style={{ minHeight: 220 }}>
+              <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={chartData} barGap={2} barCategoryGap="25%">
                   <XAxis
                     dataKey="name"

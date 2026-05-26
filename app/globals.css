@@ -149,8 +149,55 @@
   background: #3F3F46;
 }
 
-/* Print */
+/* Print / PDF Export */
 @media print {
   .no-print { display: none !important; }
-  body { background: white !important; color: black !important; }
+
+  body {
+    background: #ffffff !important;
+    color: #18181b !important;
+    font-size: 12px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Force borders to show on white background */
+  [class*="border-[#1E1E21]"],
+  [class*="border-[#27272A]"] {
+    border-color: #e4e4e7 !important;
+  }
+
+  /* Card backgrounds */
+  [class*="bg-[#111113]"],
+  [class*="bg-[#09090B]"] {
+    background: #f4f4f5 !important;
+  }
+
+  /* Keep green savings numbers green in print */
+  .text-\[\#22C55E\],
+  .text-\[\#10B981\] {
+    color: #16a34a !important;
+  }
+
+  /* Keep red numbers red */
+  .text-\[\#EF4444\] {
+    color: #dc2626 !important;
+  }
+
+  /* Light text on white */
+  .text-\[\#FAFAFA\],
+  .text-\[\#A1A1AA\] {
+    color: #18181b !important;
+  }
+
+  .text-\[\#71717A\],
+  .text-\[\#52525B\] {
+    color: #52525b !important;
+  }
+
+  /* Remove sticky positioning */
+  nav { position: relative !important; }
+
+  /* Page breaks */
+  section, .audit-tool-row { page-break-inside: avoid; }
 }

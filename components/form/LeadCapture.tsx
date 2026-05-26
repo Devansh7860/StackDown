@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import { Mail, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LeadCaptureProps {
@@ -16,11 +16,18 @@ export function LeadCapture({ token, totalSavings }: LeadCaptureProps) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
+    // Honeypot check — if filled, silently succeed (bot)
+    const form = e.target as HTMLFormElement;
+    const honeypot = (form.elements.namedItem('company_website') as HTMLInputElement)?.value;
+    if (honeypot) {
+      setStatus('success');
+      return;
+    }
 
     setStatus('loading');
     
     try {
-      const res = await fetch('/api/email', {
+      const res = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, token, totalSavings }),
@@ -42,8 +49,8 @@ export function LeadCapture({ token, totalSavings }: LeadCaptureProps) {
       <div className="flex items-start justify-between gap-6">
         <div className="space-y-2 flex-1">
           <h3 className="text-sm font-semibold text-[#FAFAFA] flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#3B82F6]" />
-            Email this report & unlock savings
+            <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
+            Email this report
           </h3>
           <p className="text-xs text-[#71717A] leading-relaxed max-w-md">
             Get a permanent link to this audit sent to your inbox. Plus, teams that complete an audit get priority access to 15-30% volume discounts on Anthropic and OpenAI API credits via Credex.
@@ -75,6 +82,7 @@ export function LeadCapture({ token, totalSavings }: LeadCaptureProps) {
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#52525B]" />
                   <input
                     type="email"
+                    name="email"
                     required
                     placeholder="Enter your work email"
                     value={email}
@@ -84,6 +92,15 @@ export function LeadCapture({ token, totalSavings }: LeadCaptureProps) {
                       transition-colors"
                   />
                 </div>
+                {/* Honeypot — hidden from humans, catches bots */}
+                <input
+                  type="text"
+                  name="company_website"
+                  style={{ display: 'none' }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                />
                 <button
                   type="submit"
                   disabled={status === 'loading'}

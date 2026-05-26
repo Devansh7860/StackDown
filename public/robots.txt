@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block audit-specific pages from being indexed by search bots
+Disallow: /api/
+
+Sitemap: https://spendlens.vercel.app/sitemap.xml
