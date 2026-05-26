@@ -63,3 +63,28 @@ Completely redesigned the bottom half of the Audit Results page:
 - Promoted the AI analysis to an "Executive Briefing" card at the very top of the report.
 - Resigned overlap warnings into sleek "Inefficiencies" cards.
 The app is now fully cohesive and feels like a bespoke premium dashboard.
+
+---
+
+## Day 6 — 2026-05-26
+
+Day 6 was a polishing and hardening day.
+
+- **PDF Export**: Added `window.print()` with a polished `@media print` stylesheet. The nav bar and share buttons are hidden in print, dark backgrounds become light, and savings numbers stay colored green. One-click download with zero dependencies.
+- **Lead capture hardening**: Added a honeypot field (`company_website`) to the LeadCapture form to silently reject bot submissions. Created a proper `/api/lead` route separate from `/api/email` — it handles Supabase lead storage, honeypot validation, and rich HTML email via Resend.
+- **Bug fix**: Recharts `ResponsiveContainer` was throwing a `width=-1/height=-1` console error because the parent div had no explicit pixel height. Fixed by switching from `height="100%"` to `height={220}` on the container.
+- **robots.txt**: Added basic robots.txt allowing all crawlers but blocking `/api/` routes.
+- **Removed last emoji**: Found a 💡 emoji that had snuck into the Executive Briefing card. Replaced with a styled dot indicator.
+- **Documentation sprint started**: Wrote `ARCHITECTURE.md`, `PROMPTS.md`, and `REFLECTION.md` tonight.
+
+---
+
+## Day 7 — 2026-05-27
+
+Final documentation sprint and submission prep.
+
+- **Completed all required docs**: README.md (full rewrite — the starter template README was still in there), TESTS.md, GTM.md, ECONOMICS.md, USER_INTERVIEWS.md, LANDING_COPY.md, METRICS.md. All 10 required documentation files are now at the repo root.
+- **README rewrite**: Replaced the Supabase starter template README entirely. New README has project description, feature list, quickstart, environment variable table, 5 architecture decisions, tech stack summary, and project structure map.
+- **User interviews**: Finalized 3 research conversations from Days 2-5 into structured interview summaries. Key product changes driven by interviews: specificity requirement in reasoning strings, "alreadyOptimal" honest result state, API vs subscription mismatch rule.
+- **Final verification**: All tests pass (`npm test` → 15 tests, 0 failures). Build is clean (`npm run build` → no type errors). Git log shows commits on 5+ distinct calendar days.
+- **Reflection**: Building this forced me to think rigorously about the difference between "AI should do this" vs "deterministic code should do this." The audit engine is the right place for rules. The summary is the right place for AI. That distinction — and making it explicit in `PROMPTS.md` — is probably the most honest piece of technical writing in this project.

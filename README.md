@@ -1,109 +1,142 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# SpendLens — AI Spend Audit Tool
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+> Stop overpaying for AI tools. Get your free audit in 3 minutes.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+SpendLens analyzes your team's AI tool subscriptions, identifies overlap and oversized plans, and shows you **exactly how much you can save** — with specific reasoning for every recommendation.
+
+Built as a lead-generation tool for [Credex](https://credex.in), which helps startups access discounted AI infrastructure credits.
+
+---
+
+## Screenshots
+
+![Landing page](./public/screenshots/landing.png)
+![Audit results dashboard](./public/screenshots/results.png)
+
+---
 
 ## Features
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Proxy
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+- **Multi-step audit form** — Add up to 8 AI tools, configure plans, seats, and actual spend. Form state persists across reloads via localStorage.
+- **Deterministic audit engine** — Rule-based logic (no AI guesswork) evaluates each tool for plan right-sizing, cross-tool overlap, and seat waste. Every recommendation includes a specific dollar figure and defensible reasoning.
+- **AI-generated executive summary** — Claude Sonnet generates a personalized 80-100 word paragraph acting as a "fractional CFO" briefing. Falls back to a template if the API is unavailable.
+- **Shareable audit URL** — Every audit gets a unique public link (`/audit/<token>`). PII is stripped from public views. Open Graph tags are dynamically generated for social previews.
+- **Lead capture + email** — Users can optionally receive their report via email. Leads are stored in Supabase. Resend sends a rich HTML email with a direct link back to the audit.
+- **PDF export** — One-click `window.print()` with a polished print stylesheet. No library needed.
 
-## Demo
+---
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+## Quick Start
 
-## Deploy to Vercel
+### Prerequisites
+- Node.js 20+
+- npm 9+
 
-Vercel deployment will guide you through creating a Supabase account and project.
+### Install
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+```bash
+git clone https://github.com/your-username/spendlens.git
+cd spendlens
+npm install
+cp .env.example .env.local
+# Fill in your API keys in .env.local
+```
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+### Run locally
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+```bash
+npm run dev
+# Open http://localhost:3000
+```
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+### Run tests
 
-## Clone and run locally
+```bash
+npm test
+```
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+### Deploy
 
-2. Create a Next.js app using the Supabase Starter template npx command
+This project is deployed on Vercel. Every push to `main` auto-deploys.
 
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
+**Deployed URL:** `https://spendlens.vercel.app` *(update with your live URL)*
 
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+---
 
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+## Environment Variables
 
-3. Use `cd` to change into the app's directory
+Copy `.env.example` to `.env.local` and fill in:
 
-   ```bash
-   cd with-supabase-app
-   ```
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon/public key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Service role key (server-side only) |
+| `ANTHROPIC_API_KEY` | Anthropic API key for AI summaries |
+| `RESEND_API_KEY` | Resend API key for transactional email |
+| `UPSTASH_REDIS_REST_URL` | Upstash Redis URL for rate limiting |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis token |
+| `NEXT_PUBLIC_APP_URL` | App base URL (e.g. `http://localhost:3000`) |
 
-4. Rename `.env.example` to `.env.local` and update the following:
+All integrations degrade gracefully if keys are missing — the app works in a "mock" mode without external services.
 
-  ```env
-  NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=[INSERT SUPABASE PROJECT API PUBLISHABLE OR ANON KEY]
-  ```
-  > [!NOTE]
-  > This example uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, which refers to Supabase's new **publishable** key format.
-  > Both legacy **anon** keys and new **publishable** keys can be used with this variable name during the transition period. Supabase's dashboard may show `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; its value can be used in this example.
-  > See the [full announcement](https://github.com/orgs/supabase/discussions/29260) for more information.
+---
 
-  Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
+## Architecture Decisions
 
-5. You can now run the Next.js local development server:
+### 1. Next.js over a Vite SPA
+Shareable audit URLs (`/audit/abc123`) need server-side rendering for Open Graph meta tags. A pure SPA returns `<div id="root">` to crawlers — Twitter cards, Slack previews, and LinkedIn embeds would all be blank. Next.js App Router handles this with `generateMetadata()` natively.
 
-   ```bash
-   npm run dev
-   ```
+### 2. Deterministic audit engine — no AI for the core logic
+The assignment specifically tests whether you know when NOT to use AI. The audit math must be defensible by a finance-literate person. AI-generated pricing recommendations would be unreliable and unauditable. The engine is pure TypeScript with typed inputs/outputs, and every recommendation cites specific plan names and dollar figures. AI is reserved for the executive summary paragraph — where prose quality matters more than precision.
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+### 3. Supabase over Firebase
+Predictable pricing (Firestore charges per document read — a Product Hunt spike could generate surprise bills). SQL is more auditable than Firestore's document model. Row-Level Security ensures lead data is never exposed to client-side code.
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+### 4. Upstash Redis for rate limiting over in-memory state
+In-memory rate limiting doesn't survive serverless cold starts. Upstash Redis persists across function invocations and is free at our traffic scale. Sliding window of 5 audits per IP per hour.
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+### 5. Email captured after value, never before
+The tool shows the complete audit result without requiring any login or email. The lead capture form appears at the bottom of the results page, *after* the user has already seen their savings. This builds trust and meaningfully increases conversion compared to gating results.
 
-## Feedback and issues
+---
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+## Tech Stack
 
-## More Supabase examples
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 15 (App Router) + TypeScript |
+| Styling | Tailwind CSS v4 + custom design tokens |
+| Components | shadcn/ui (unstyled, copy-pasted into project) |
+| Animations | Framer Motion (minimal — 3 uses) |
+| Database | Supabase (PostgreSQL + RLS) |
+| Email | Resend |
+| AI | Anthropic Claude Sonnet (summary only) |
+| Rate Limiting | Upstash Redis |
+| Deployment | Vercel |
+| Testing | Vitest |
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+---
+
+## Project Structure
+
+```
+├── app/
+│   ├── api/
+│   │   ├── audit/          # POST /api/audit — runs the engine
+│   │   ├── audit/[token]/  # GET /api/audit/:token — fetches saved audit
+│   │   └── lead/           # POST /api/lead — captures email, sends report
+│   ├── audit/[token]/      # Results page (SSR for OG tags)
+│   └── page.tsx            # Landing page
+├── components/
+│   ├── form/               # Multi-step audit form components
+│   └── ui/                 # Shared UI components (tool logos, etc.)
+├── lib/
+│   ├── audit-engine/       # Core business logic (pure TS, no side effects)
+│   ├── anthropic.ts        # AI summary generation with fallback
+│   ├── ratelimit.ts        # Upstash rate limiter config
+│   └── supabase/           # Supabase client instances
+├── __tests__/              # Vitest test files
+└── public/
+    └── logos/              # SVG logos for AI tools
+```
