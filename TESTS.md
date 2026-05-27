@@ -2,7 +2,7 @@
 
 ## Overview
 
-SpendLens uses **Vitest** for unit testing. Tests focus on the audit engine — the core business logic that must be deterministic, defensible, and numerically correct.
+StackDown uses **Vitest** for unit testing. Tests focus on the audit engine — the core business logic that must be deterministic, defensible, and numerically correct.
 
 ## Running Tests
 

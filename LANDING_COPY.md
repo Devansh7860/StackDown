@@ -27,7 +27,7 @@ Every audit gets a unique link. Share with your co-founder, CFO, or ops team.
 
 ## Social Proof
 
-> *"We were paying for Cursor Business AND GitHub Copilot for every developer on the team. SpendLens caught it in 30 seconds. Saved us $340/month."*
+> *"We were paying for Cursor Business AND GitHub Copilot for every developer on the team. StackDown caught it in 30 seconds. Saved us $340/month."*
 > — Engineering Manager, 12-person B2B SaaS *(mocked testimonial)*
 
 > *"I always suspected we were overspending but never had bandwidth to compare plans. This did it for me in three minutes."*
@@ -63,7 +63,7 @@ No. Your email (if provided) is only used to send your audit report. For audits 
 The audit uses rule-based logic, not AI guesses. Each recommendation includes specific reasoning you can verify yourself. Think of it as a rigorous starting point, not a final decision.
 
 **Q: What's Credex?**
-Credex helps startups access discounted AI infrastructure credits from companies that over-purchased. The discounts are real — typically 15-30% below retail. SpendLens is built by Credex as a free tool to help you find your savings first.
+Credex helps startups access discounted AI infrastructure credits from companies that over-purchased. The discounts are real — typically 15-30% below retail. StackDown is built by Credex as a free tool to help you find your savings first.
 
 **Q: What tools do you support?**
 Currently: Cursor, GitHub Copilot, Claude, ChatGPT, Anthropic API, OpenAI API, Google Gemini, and Windsurf. These cover the vast majority of AI tool spend for engineering teams.
@@ -95,7 +95,7 @@ Here's what happens at most startups:
 You're not looking at one bill. You're looking at 4.
 
 **Tweet 3 (The tool):**
-SpendLens asks you to add your AI tools + plans + seats.
+StackDown asks you to add your AI tools + plans + seats.
 
 It then tells you:
 → What to cancel

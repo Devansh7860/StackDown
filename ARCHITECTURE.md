@@ -1,8 +1,8 @@
-# ARCHITECTURE.md — SpendLens System Design
+# ARCHITECTURE.md — StackDown System Design
 
 ## Overview
 
-SpendLens is a server-rendered Next.js application that takes a user's AI tool subscriptions as input, runs them through a deterministic rule-based audit engine, generates a shareable result URL with dynamic Open Graph metadata, and optionally captures a lead and sends a transactional email.
+StackDown is a server-rendered Next.js application that takes a user's AI tool subscriptions as input, runs them through a deterministic rule-based audit engine, generates a shareable result URL with dynamic Open Graph metadata, and optionally captures a lead and sends a transactional email.
 
 ---
 

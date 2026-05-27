@@ -88,3 +88,17 @@ Final documentation sprint and submission prep.
 - **User interviews**: Finalized 3 research conversations from Days 2-5 into structured interview summaries. Key product changes driven by interviews: specificity requirement in reasoning strings, "alreadyOptimal" honest result state, API vs subscription mismatch rule.
 - **Final verification**: All tests pass (`npm test` → 15 tests, 0 failures). Build is clean (`npm run build` → no type errors). Git log shows commits on 5+ distinct calendar days.
 - **Reflection**: Building this forced me to think rigorously about the difference between "AI should do this" vs "deterministic code should do this." The audit engine is the right place for rules. The summary is the right place for AI. That distinction — and making it explicit in `PROMPTS.md` — is probably the most honest piece of technical writing in this project.
+
+---
+
+## Day 7.5 — 2026-05-27 (Bug fixes before submission)
+
+Found and fixed a batch of bugs during final review:
+
+- **Audit link not found in new tab**: Root cause was twofold. (1) The `GET /api/audit/[token]` route was returning 404 when `SUPABASE_SECRET_KEY` wasn't set, even though the RLS policy allows public reads — fixed by adding an anon key fallback. (2) `sessionStorage` doesn't persist across tabs — fixed by caching audit results in `localStorage` (7-day TTL) in addition to `sessionStorage`.
+- **Login redirect to boilerplate route**: The Supabase starter's `login-form.tsx` was redirecting to `/protected` after login. Changed to redirect to `/` since this tool doesn't need an authenticated dashboard.
+- **Supabase boilerplate at `/protected`**: Replaced the "Next.js Supabase Starter" page with a simple redirect to home.
+- **Form button stuck on "Analyzing..."**: The `goBack()` function wasn't resetting `isSubmitting` state. If a user hit back after the request started (or failed), the button stayed in loading state. Fixed.
+- **Chart tooltip readability**: The Recharts tooltip had correct background styles but missing `labelStyle` and `itemStyle`, so the default black text was invisible on the dark background. Added explicit white text styles.
+- **Feature tabs stock photos**: Replaced three Unsplash images with purpose-built inline SVGs (Venn overlap diagram, before/after bar chart, savings card). No external image dependencies.
+

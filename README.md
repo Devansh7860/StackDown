@@ -1,8 +1,8 @@
-# SpendLens — AI Spend Audit Tool
+# StackDown — AI Spend Audit Tool
 
 > Stop overpaying for AI tools. Get your free audit in 3 minutes.
 
-SpendLens analyzes your team's AI tool subscriptions, identifies overlap and oversized plans, and shows you **exactly how much you can save** — with specific reasoning for every recommendation.
+StackDown analyzes your team's AI tool subscriptions, identifies overlap and oversized plans, and shows you **exactly how much you can save** — with specific reasoning for every recommendation.
 
 Built as a lead-generation tool for [Credex](https://credex.in), which helps startups access discounted AI infrastructure credits.
 

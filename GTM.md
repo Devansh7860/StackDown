@@ -53,7 +53,7 @@ Email 10 friends at startups. One well-placed forward in a startup Slack generat
 
 Credex has relationships with AI tool resellers and startup accelerators. This creates a channel that a standalone product couldn't access:
 
-1. **Accelerator welcome packets** — YC, Antler, Pioneer onboarding docs often include "free tools for founders." SpendLens fits perfectly as a free resource. Credex can pitch inclusion to 3-5 accelerators.
+1. **Accelerator welcome packets** — YC, Antler, Pioneer onboarding docs often include "free tools for founders." StackDown fits perfectly as a free resource. Credex can pitch inclusion to 3-5 accelerators.
 2. **TLDR Newsletter sponsorship** — Credex already spends on developer marketing. A single TLDR placement (30k+ developer subscribers) reaches the exact target persona at ~$1,500 — 10x cheaper per lead than most B2B channels.
 3. **Reseller relationships** — Companies that already sell Cursor, Claude, or Copilot seats could bundle a free audit offer with their outreach: "Thinking about upgrading? Run a free audit first."
 

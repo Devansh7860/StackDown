@@ -2,7 +2,7 @@
 
 ## The Business Context
 
-SpendLens is a **free lead generation tool** for Credex. It has no direct revenue. Its value is measured by the quality and volume of warm leads it delivers to the Credex sales team — leads who have already quantified their AI tool pain.
+StackDown is a **free lead generation tool** for Credex. It has no direct revenue. Its value is measured by the quality and volume of warm leads it delivers to the Credex sales team — leads who have already quantified their AI tool pain.
 
 ---
 
@@ -89,11 +89,11 @@ This ratio is extremely favorable because the tool itself costs almost nothing t
 
 ## Path to $1M ARR for Credex
 
-SpendLens alone at current projections generates ~$260k ARR contribution in Year 1. The gap to $1M requires:
+StackDown alone at current projections generates ~$260k ARR contribution in Year 1. The gap to $1M requires:
 
 1. **10x audit volume** → $2.6M ARR (requires sustained distribution — Show HN, accelerator partnerships, Credex customer referrals)
 2. **Higher ACV enterprise deals** → A single 50-person company switching to Credex is worth $500-2,000/month vs the $200 base case. Enterprise upsell from SMB leads changes the math significantly.
-3. **Parallel lead channels** → SpendLens is one tool. The same model works for other categories: "Audit your SaaS spend" (Notion + Linear + Figma + Vercel), "Audit your cloud costs" (AWS + GCP + Vercel). Each audit category is a new lead funnel.
+3. **Parallel lead channels** → StackDown is one tool. The same model works for other categories: "Audit your SaaS spend" (Notion + Linear + Figma + Vercel), "Audit your cloud costs" (AWS + GCP + Vercel). Each audit category is a new lead funnel.
 
 ---
 
@@ -101,4 +101,4 @@ SpendLens alone at current projections generates ~$260k ARR contribution in Year
 
 The product is a **lead qualification machine** disguised as a utility. Every completed audit pre-qualifies the lead on the most important B2B sales question: "Do they actually have a budget problem worth solving?" A lead who has just seen "$472/month in savings" is not cold — they are warm, educated, and motivated. The Credex sales conversation starts at "let me show you how to get that $472 back" rather than "do you think you might be overspending?"
 
-This is the compounding value that makes SpendLens worth building even as a zero-revenue product.
+This is the compounding value that makes StackDown worth building even as a zero-revenue product.

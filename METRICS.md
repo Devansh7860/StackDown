@@ -6,7 +6,7 @@
 
 Not leads. Not signups. Not page views.
 
-**Why:** A completed audit is the moment SpendLens delivers its core value. Everything downstream — leads, shares, Credex referrals, word-of-mouth — flows from completed audits. If this number grows, it means the product is being discovered, understood, and used. If it's flat, it doesn't matter if the landing page looks great or the Credex CTA converts well — the top of the funnel is broken.
+**Why:** A completed audit is the moment StackDown delivers its core value. Everything downstream — leads, shares, Credex referrals, word-of-mouth — flows from completed audits. If this number grows, it means the product is being discovered, understood, and used. If it's flat, it doesn't matter if the landing page looks great or the Credex CTA converts well — the top of the funnel is broken.
 
 Audits started but not completed don't count. They indicate intent but not value delivery.
 

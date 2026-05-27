@@ -1,4 +1,4 @@
-# REFLECTION.md — SpendLens Project Retrospective
+# REFLECTION.md — StackDown Project Retrospective
 
 ---
 
@@ -30,7 +30,7 @@ This taught me that the data layer is often more complex than the logic layer in
 
 **Real-time audit updates.** Currently, the AI summary generation happens synchronously during the audit API call, which adds latency. With more time, I'd decouple this: return the deterministic audit result immediately (~100ms), then stream the AI summary in via Supabase Realtime or a simple polling endpoint. Users would see their savings number instantly, then watch the AI analysis appear.
 
-**Actual user interviews before building.** I did interviews mostly after the core product was done. Ideally these happen on Day 1 — the team size inputs, use case classification, and tool coverage all would have been better informed by talking to 3-4 Engineering Managers first.
+**Actual user interviews before building.** To be honest, I didn't actually do any real user interviews before building this. I just kind of guessed what Engineering Managers would want based on common sense and asking a few friends. Ideally, if this were a real startup, I would have talked to 3-4 target customers first. The team size inputs, use case classification, and tool coverage all would have been much better informed.
 
 ---
 

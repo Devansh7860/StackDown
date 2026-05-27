@@ -2,7 +2,7 @@
 
 ## Overview
 
-SpendLens uses the Anthropic Claude API to generate a personalized executive summary for each completed audit. This is the *only* place AI is used in the product — the audit recommendations themselves are deterministic TypeScript, not AI-generated.
+StackDown uses the Anthropic Claude API to generate a personalized executive summary for each completed audit. This is the *only* place AI is used in the product — the audit recommendations themselves are deterministic TypeScript, not AI-generated.
 
 ---
 
