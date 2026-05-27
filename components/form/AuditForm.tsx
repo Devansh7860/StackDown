@@ -251,7 +251,6 @@ export function AuditForm() {
                 teamSize={teamSize}
                 useCase={useCase}
                 onSubmit={handleSubmit}
-                onBack={goBack}
                 isSubmitting={isSubmitting}
               />
             )}
