@@ -22,7 +22,7 @@ const OVERLAP_RULES: OverlapRule[] = [
       'Cursor and GitHub Copilot have near-identical feature sets: inline code completions, AI chat, and context-aware suggestions. Cursor\'s multi-file editing and Composer agent go beyond anything Copilot offers — making Copilot entirely redundant for teams using Cursor as their primary editor.',
     suggestedAction:
       'Cancel GitHub Copilot. Cursor already covers everything Copilot does, plus multi-file agent workflows. The only reason to keep both is if some team members use VS Code exclusively — in that case, standardize on one IDE.',
-    savingsCalc: (_, copilot) => copilot.monthlySpend,
+    savingsCalc: (cursor, copilot) => copilot.monthlySpend,
   },
   {
     tools: ['cursor', 'windsurf'],
@@ -42,7 +42,7 @@ const OVERLAP_RULES: OverlapRule[] = [
       'GitHub Copilot and Windsurf both provide in-editor AI code completion and chat. Windsurf\'s Cascade feature subsumes Copilot\'s inline suggestion workflow. Teams using Windsurf as their IDE do not need a separate Copilot subscription.',
     suggestedAction:
       'Cancel GitHub Copilot if Windsurf is your team\'s primary IDE.',
-    savingsCalc: (copilot, _) => copilot.monthlySpend,
+    savingsCalc: (copilot, windsurf) => copilot.monthlySpend,
   },
   {
     tools: ['claude', 'chatgpt'],

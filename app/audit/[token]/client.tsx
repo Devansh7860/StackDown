@@ -423,11 +423,10 @@ export function AuditResultClient() {
                     }}
                     labelStyle={{ color: 'hsl(var(--muted-foreground))', marginBottom: '4px', fontWeight: 500 }}
                     itemStyle={{ color: 'hsl(var(--foreground))' }}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     formatter={((value: number | string, name: string) => [
                       `$${Math.round(Number(value)).toLocaleString()}`,
                       name === 'current' ? 'Current' : 'Optimized',
-                    ]) as any}
+                    ]) as never}
                     cursor={{ fill: 'rgba(150,150,150,0.1)' }}
                   />
                   <Bar dataKey="current" radius={[4, 4, 0, 0]} maxBarSize={36}>

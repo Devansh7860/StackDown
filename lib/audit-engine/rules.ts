@@ -227,7 +227,7 @@ function evalChatGPT(tool: ToolInput, _ctx: EvalContext): ToolRecommendation {
   };
 }
 
-function evalAnthropicApi(tool: ToolInput, _ctx: EvalContext): ToolRecommendation {
+function evalAnthropicApi(tool: ToolInput): ToolRecommendation {
   const base = {
     toolId: tool.toolId,
     toolName: TOOLS.anthropic_api.name,
@@ -262,7 +262,7 @@ function evalAnthropicApi(tool: ToolInput, _ctx: EvalContext): ToolRecommendatio
   };
 }
 
-function evalOpenAiApi(tool: ToolInput, _ctx: EvalContext): ToolRecommendation {
+function evalOpenAiApi(tool: ToolInput): ToolRecommendation {
   const base = {
     toolId: tool.toolId,
     toolName: TOOLS.openai_api.name,
