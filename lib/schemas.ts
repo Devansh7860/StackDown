@@ -1,5 +1,5 @@
 // lib/schemas.ts
-// Zod validation schemas for SpendLens
+// Zod validation schemas for StackDown
 
 import { z } from 'zod';
 import { TOOL_IDS } from './audit-engine/tools';

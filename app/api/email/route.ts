@@ -51,19 +51,19 @@ export async function POST(req: NextRequest) {
 
   try {
     await resend.emails.send({
-      from: 'SpendLens <onboarding@resend.dev>',
+      from: 'StackDown <onboarding@resend.dev>',
       to: [email],
-      subject: `Your SpendLens AI Audit ($${totalSavings}/mo savings)`,
+      subject: `Your StackDown AI Audit ($${totalSavings}/mo savings)`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-w-xl; margin: 0 auto; color: #18181b;">
-          <h2 style="color: #09090b;">Your SpendLens Audit is ready.</h2>
+          <h2 style="color: #09090b;">Your StackDown Audit is ready.</h2>
           <p>We found <strong>$${totalSavings}/mo</strong> in potential savings across your team's AI tools.</p>
           <p>You can view your full interactive breakdown, right-sizing recommendations, and AI summary here:</p>
           <p><a href="${auditUrl}" style="color: #3b82f6; text-decoration: none; font-weight: 500;">View your full report &rarr;</a></p>
           <br />
           <hr style="border: none; border-top: 1px solid #e4e4e7;" />
           <h3 style="color: #09090b;">Unlock Credex API Discounts</h3>
-          <p style="color: #52525b; font-size: 14px;">As a bonus, teams that complete a SpendLens audit are eligible for 15-30% volume discounts on Anthropic and OpenAI API credits through Credex. Reply to this email if you're interested in activating this.</p>
+          <p style="color: #52525b; font-size: 14px;">As a bonus, teams that complete a StackDown audit are eligible for 15-30% volume discounts on Anthropic and OpenAI API credits through Credex. Reply to this email if you're interested in activating this.</p>
         </div>
       `,
     });

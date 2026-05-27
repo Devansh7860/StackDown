@@ -66,12 +66,12 @@ export async function POST(req: NextRequest) {
 
   try {
     await resend.emails.send({
-      from: 'SpendLens <onboarding@resend.dev>',
+      from: 'StackDown <onboarding@resend.dev>',
       to: [email],
       subject: `Your AI Spend Audit — ${totalSavings > 0 ? `$${Math.round(totalSavings)}/mo savings found` : 'Your optimized stack'}`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 580px; margin: 0 auto; color: #18181b; background: #09090b; padding: 40px 32px; border-radius: 12px;">
-          <h2 style="color: #fafafa; font-size: 20px; margin-bottom: 8px;">Your SpendLens audit is ready.</h2>
+          <h2 style="color: #fafafa; font-size: 20px; margin-bottom: 8px;">Your StackDown audit is ready.</h2>
 
           ${totalSavings > 0
             ? `<p style="color: #a1a1aa; font-size: 15px; line-height: 1.6;">
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
           </div>` : ''}
 
           <p style="color: #3f3f46; font-size: 12px; margin-top: 40px; border-top: 1px solid #27272a; padding-top: 20px;">
-            SpendLens by Credex — Free AI tool spend auditing for startups.<br/>
+            StackDown by Credex — Free AI tool spend auditing for startups.<br/>
             You're receiving this because you requested your audit report.
           </p>
         </div>

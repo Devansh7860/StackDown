@@ -1,5 +1,5 @@
 // lib/audit-engine/types.ts
-// All TypeScript types for the SpendLens audit engine
+// All TypeScript types for the StackDown audit engine
 
 export type ToolId =
   | 'cursor'
