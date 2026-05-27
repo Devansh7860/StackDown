@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { nanoid } from 'nanoid';
 import { createHash } from 'crypto';
 import { runAudit } from '@/lib/audit-engine/index';
-import { generateAuditSummary } from '@/lib/anthropic';
+import { generateAuditSummary } from '@/lib/gemini';
 import { checkRateLimit } from '@/lib/ratelimit';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { TOOL_IDS } from '@/lib/audit-engine/tools';

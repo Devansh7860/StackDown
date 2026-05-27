@@ -1,11 +1,11 @@
-// lib/anthropic.ts
-// AI audit summary generation with graceful fallback.
+// lib/gemini.ts
+// AI audit summary generation with graceful fallback using Google Gemini.
 
-import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { AuditResult, AuditInput } from './audit-engine/types';
 
-const client = process.env.ANTHROPIC_API_KEY
-  ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const genAI = process.env.GEMINI_API_KEY
+  ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
   : null;
 
 function buildPrompt(result: AuditResult, input: AuditInput): string {
@@ -45,28 +45,26 @@ export async function generateAuditSummary(
   result: AuditResult,
   input: AuditInput
 ): Promise<string> {
-  if (!client) {
-    console.warn('ANTHROPIC_API_KEY not set — using fallback summary');
+  if (!genAI) {
+    console.warn('GEMINI_API_KEY not set — using fallback summary');
     return fallbackSummary(result, input);
   }
 
   try {
+    const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite' });
+
     const response = await Promise.race([
-      client.messages.create({
-        model: 'claude-sonnet-4-5',
-        max_tokens: 200,
-        messages: [{ role: 'user', content: buildPrompt(result, input) }],
-      }),
+      model.generateContent(buildPrompt(result, input)),
       new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Anthropic timeout')), 8000)
+        setTimeout(() => reject(new Error('Gemini timeout')), 8000)
       ),
     ]);
 
-    const text = response.content[0];
-    if (text.type === 'text') return text.text;
+    const text = response.response.text();
+    if (text) return text.trim();
     return fallbackSummary(result, input);
   } catch (err) {
-    console.error('Anthropic API failed, using fallback:', err);
+    console.error('Gemini API failed, using fallback:', err);
     return fallbackSummary(result, input);
   }
 }
