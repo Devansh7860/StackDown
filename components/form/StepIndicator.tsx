@@ -24,7 +24,7 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
       {/* Step dots + connecting line */}
       <div className="relative flex items-center justify-between mb-3">
         {/* Background line */}
-        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-[#27272A]" />
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-muted" />
 
         {/* Progress line */}
         <div
@@ -44,8 +44,8 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
                 className={cn(
                   'w-7 h-7 rounded-full border-2 flex items-center justify-center text-xs font-semibold transition-all duration-300',
                   isDone && 'bg-[#22C55E] border-[#22C55E] text-black',
-                  isActive && 'bg-[#09090B] border-[#22C55E] text-[#22C55E]',
-                  !isDone && !isActive && 'bg-[#09090B] border-[#27272A] text-[#71717A]'
+                  isActive && 'bg-background border-[#22C55E] text-[#22C55E]',
+                  !isDone && !isActive && 'bg-background border-border text-muted-foreground'
                 )}
               >
                 {isDone ? <Check className="w-3.5 h-3.5" /> : step.number}
@@ -65,9 +65,9 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
               key={step.number}
               className={cn(
                 'text-xs font-medium transition-colors duration-300',
-                isActive && 'text-[#FAFAFA]',
+                isActive && 'text-foreground',
                 isDone && 'text-[#22C55E]',
-                !isActive && !isDone && 'text-[#71717A]'
+                !isActive && !isDone && 'text-muted-foreground'
               )}
             >
               {step.label}

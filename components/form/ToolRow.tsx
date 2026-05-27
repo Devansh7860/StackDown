@@ -56,7 +56,7 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
         'rounded-xl transition-all duration-300 relative overflow-hidden',
         isAdded
           ? 'border border-[#3B82F6]/30 bg-[#3B82F6]/5 shadow-[0_0_20px_rgba(59,130,246,0.05)]'
-          : 'border border-[#27272A] bg-[#111113] hover:border-[#3F3F46] hover:bg-[#18181B]'
+          : 'border border-border bg-card hover:border-muted hover:bg-secondary'
       )}
     >
       {isAdded && (
@@ -74,8 +74,8 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
         <div className="flex items-center gap-3">
           <ToolLogo toolId={toolId} size={22} className={isAdded ? "opacity-100" : "opacity-60"} />
           <div>
-            <p className={cn("text-sm font-medium transition-colors", isAdded ? "text-[#3B82F6]" : "text-[#FAFAFA]")}>{tool.name}</p>
-            <p className="text-xs text-[#71717A]">{tool.category}</p>
+            <p className={cn("text-sm font-medium transition-colors", isAdded ? "text-[#3B82F6]" : "text-foreground")}>{tool.name}</p>
+            <p className="text-xs text-muted-foreground">{tool.category}</p>
           </div>
         </div>
 
@@ -87,7 +87,7 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
               </span>
               <ChevronDown
                 className={cn(
-                  'w-4 h-4 text-[#71717A] transition-transform duration-200',
+                  'w-4 h-4 text-muted-foreground transition-transform duration-200',
                   expanded && 'rotate-180'
                 )}
               />
@@ -98,7 +98,7 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                   onRemove(toolId);
                   setExpanded(false);
                 }}
-                className="p-1 rounded text-[#71717A] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
+                className="p-1 rounded text-muted-foreground hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
                 aria-label={`Remove ${tool.name}`}
               >
                 <X className="w-4 h-4" />
@@ -128,10 +128,10 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
 
       {/* Expanded detail form */}
       {isAdded && expanded && (
-        <div className="px-4 pb-4 border-t border-[#27272A] pt-4 space-y-4">
+        <div className="px-4 pb-4 border-t border-border pt-4 space-y-4">
           {/* Plan selector */}
           <div>
-            <label className="block text-xs font-medium text-[#A1A1AA] mb-1.5">
+            <label className="block text-xs font-medium text-muted-foreground mb-1.5">
               Plan
             </label>
             <div className="relative">
@@ -139,8 +139,8 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                 id={`plan-${toolId}`}
                 value={entry.planId}
                 onChange={(e) => handlePlanChange(e.target.value)}
-                className="w-full bg-[#27272A] border border-[#3F3F46] rounded-md px-3 py-2 text-sm
-                  text-[#FAFAFA] appearance-none cursor-pointer
+                className="w-full bg-muted border border-muted rounded-md px-3 py-2 text-sm
+                  text-foreground appearance-none cursor-pointer
                   focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]
                   transition-colors"
               >
@@ -152,10 +152,10 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#71717A] pointer-events-none" />
+              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
             </div>
             {selectedPlan && selectedPlan.features.length > 0 && (
-              <p className="mt-1 text-xs text-[#71717A] line-clamp-1">
+              <p className="mt-1 text-xs text-muted-foreground line-clamp-1">
                 {selectedPlan.features.slice(0, 2).join(' · ')}
               </p>
             )}
@@ -164,7 +164,7 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
           {/* Seats + Spend row */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#A1A1AA] mb-1.5" htmlFor={`seats-${toolId}`}>
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5" htmlFor={`seats-${toolId}`}>
                 Seats
               </label>
               <input
@@ -173,14 +173,14 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                 min={1}
                 value={entry.seats}
                 onChange={(e) => handleSeatsChange(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-full bg-[#27272A] border border-[#3F3F46] rounded-md px-3 py-2 text-sm
-                  text-[#FAFAFA] focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]
+                className="w-full bg-muted border border-muted rounded-md px-3 py-2 text-sm
+                  text-foreground focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]
                   transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-[#A1A1AA] mb-1.5" htmlFor={`spend-${toolId}`}>
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5" htmlFor={`spend-${toolId}`}>
                 Monthly spend ($)
               </label>
               <input
@@ -192,8 +192,8 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                 onChange={(e) => onChange(toolId, { monthlySpend: parseFloat(e.target.value) || 0 })}
                 disabled={!entry.overrideSpend && !!selectedPlan && selectedPlan.pricePerSeat > 0}
                 className={cn(
-                  'w-full bg-[#27272A] border border-[#3F3F46] rounded-md px-3 py-2 text-sm',
-                  'text-[#FAFAFA] focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]',
+                  'w-full bg-muted border border-muted rounded-md px-3 py-2 text-sm',
+                  'text-foreground focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]',
                   'transition-colors font-mono',
                   !entry.overrideSpend && selectedPlan && selectedPlan.pricePerSeat > 0 && 'opacity-60 cursor-not-allowed'
                 )}
@@ -211,10 +211,10 @@ export function ToolRow({ toolId, entry, onAdd, onRemove, onChange }: ToolRowPro
                 onChange={(e) => onChange(toolId, { overrideSpend: e.target.checked })}
                 className="w-3.5 h-3.5 accent-[#3B82F6]"
               />
-              <label htmlFor={`override-${toolId}`} className="text-xs text-[#71717A] cursor-pointer hover:text-[#A1A1AA] transition-colors">
+              <label htmlFor={`override-${toolId}`} className="text-xs text-muted-foreground cursor-pointer hover:text-muted-foreground transition-colors">
                 Override — I pay a different amount
                 {!entry.overrideSpend && (
-                  <span className="ml-1 text-[#A1A1AA]">
+                  <span className="ml-1 text-muted-foreground">
                     (auto: {entry.seats} × ${selectedPlan.pricePerSeat} = ${entry.seats * selectedPlan.pricePerSeat}/mo)
                   </span>
                 )}

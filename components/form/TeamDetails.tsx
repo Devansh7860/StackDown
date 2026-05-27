@@ -29,10 +29,10 @@ export function TeamDetails({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-[#FAFAFA] mb-1">
+        <h2 className="text-lg font-semibold text-foreground mb-1">
           Tell us about your team
         </h2>
-        <p className="text-sm text-[#71717A]">
+        <p className="text-sm text-muted-foreground">
           This helps us calibrate which plans are right-sized for you.
         </p>
       </div>
@@ -41,7 +41,7 @@ export function TeamDetails({
       <div>
         <label
           htmlFor="team-size"
-          className="block text-sm font-medium text-[#A1A1AA] mb-3"
+          className="block text-sm font-medium text-muted-foreground mb-3"
         >
           How many people use AI tools on your team?
         </label>
@@ -54,20 +54,20 @@ export function TeamDetails({
             value={teamSize || ''}
             placeholder="e.g. 8"
             onChange={(e) => onTeamSizeChange(Math.max(1, parseInt(e.target.value) || 1))}
-            className="w-32 bg-[#111113] border border-[#27272A] rounded-md px-3 py-2 text-sm
-              text-[#FAFAFA] focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]
+            className="w-32 bg-card border border-border rounded-md px-3 py-2 text-sm
+              text-foreground focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]
               transition-colors font-mono"
           />
-          <span className="text-sm text-[#71717A]">people</span>
+          <span className="text-sm text-muted-foreground">people</span>
         </div>
-        <p className="mt-1.5 text-xs text-[#71717A]">
+        <p className="mt-1.5 text-xs text-muted-foreground">
           Count everyone who uses any AI tool — devs, PMs, designers, etc.
         </p>
       </div>
 
       {/* Use case */}
       <div>
-        <label className="block text-sm font-medium text-[#A1A1AA] mb-3">
+        <label className="block text-sm font-medium text-muted-foreground mb-3">
           What is your team's primary use for AI tools?
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -82,17 +82,17 @@ export function TeamDetails({
                 className={cn(
                   'flex flex-col gap-2 p-4 rounded-xl border text-left transition-all duration-300 relative overflow-hidden',
                   isSelected
-                    ? 'border-[#3B82F6]/50 bg-[#3B82F6]/5 text-[#FAFAFA] shadow-[0_0_20px_rgba(59,130,246,0.1)]'
-                    : 'border-[#27272A] bg-[#111113] text-[#A1A1AA] hover:border-[#3F3F46] hover:bg-[#18181B]'
+                    ? 'border-[#3B82F6]/50 bg-[#3B82F6]/5 text-foreground shadow-[0_0_20px_rgba(59,130,246,0.1)]'
+                    : 'border-border bg-card text-muted-foreground hover:border-muted hover:bg-secondary'
                 )}
                 aria-pressed={isSelected}
               >
                 {isSelected && (
                    <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent opacity-50" />
                 )}
-                <span className={cn("text-lg", isSelected ? "text-[#3B82F6]" : "text-[#71717A]")}>{icon}</span>
+                <span className={cn("text-lg", isSelected ? "text-[#3B82F6]" : "text-muted-foreground")}>{icon}</span>
                 <span className="text-sm font-medium">{label}</span>
-                <span className="text-xs text-[#71717A] leading-relaxed">{desc}</span>
+                <span className="text-xs text-muted-foreground leading-relaxed">{desc}</span>
               </button>
             );
           })}

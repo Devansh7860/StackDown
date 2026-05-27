@@ -4,53 +4,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ================================================================
-   SPENDLENS — Design System
-   Linear × Vercel × Raycast inspired
-   ================================================================ */
-
 @layer base {
   :root {
-    --background: 240 6% 4%;
-    --foreground: 0 0% 98%;
-    --card: 240 4% 10%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 4% 10%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 6% 4%;
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 4% 63%;
-    --accent: 240 4% 16%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84% 60%;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
-    --ring: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
     --radius: 0.5rem;
-
-    /* SpendLens tokens */
-    --bg-primary: #09090B;
-    --bg-secondary: #111113;
-    --bg-card: #18181B;
-    --bg-elevated: #27272A;
-
-    --text-primary: #FAFAFA;
-    --text-secondary: #A1A1AA;
-    --text-muted: #71717A;
-    --text-dimmed: #52525B;
-
-    --border-default: #1E1E21;
-    --border-subtle: #27272A;
-    --border-hover: #3F3F46;
-
-    --green: #22C55E;
-    --red: #EF4444;
-    --amber: #F59E0B;
-    --blue: #3B82F6;
   }
 
   .dark {
@@ -80,23 +55,19 @@
   * {
     @apply border-border;
   }
-
   html {
-    color-scheme: dark;
+    color-scheme: light dark;
   }
-
   body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
     font-family: 'Geist', 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* Gradient heading — subtle white→gray */
+/* Gradient heading — subtle text-foreground to muted-foreground */
 .gradient-text {
-  background: linear-gradient(to bottom, #FAFAFA, #52525B);
+  background: linear-gradient(to bottom, hsl(var(--foreground)), hsl(var(--muted-foreground)));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -115,7 +86,7 @@
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #18181B 25%, #27272A 50%, #18181B 75%);
+  background: linear-gradient(90deg, hsl(var(--secondary)) 25%, hsl(var(--muted)) 50%, hsl(var(--secondary)) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 4px;
@@ -126,7 +97,7 @@
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 .tool-card:hover {
-  border-color: var(--border-hover);
+  border-color: hsl(var(--border));
 }
 
 /* Savings bar width transition */
@@ -142,11 +113,11 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #27272A;
+  background: hsl(var(--muted));
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3F3F46;
+  background: hsl(var(--border));
 }
 
 /* Print / PDF Export */
@@ -159,40 +130,6 @@
     font-size: 12px;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-  }
-
-  /* Force borders to show on white background */
-  [class*="border-[#1E1E21]"],
-  [class*="border-[#27272A]"] {
-    border-color: #e4e4e7 !important;
-  }
-
-  /* Card backgrounds */
-  [class*="bg-[#111113]"],
-  [class*="bg-[#09090B]"] {
-    background: #f4f4f5 !important;
-  }
-
-  /* Keep green savings numbers green in print */
-  .text-\[\#22C55E\],
-  .text-\[\#10B981\] {
-    color: #16a34a !important;
-  }
-
-  /* Keep red numbers red */
-  .text-\[\#EF4444\] {
-    color: #dc2626 !important;
-  }
-
-  /* Light text on white */
-  .text-\[\#FAFAFA\],
-  .text-\[\#A1A1AA\] {
-    color: #18181b !important;
-  }
-
-  .text-\[\#71717A\],
-  .text-\[\#52525B\] {
-    color: #52525b !important;
   }
 
   /* Remove sticky positioning */

@@ -5,6 +5,17 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { AuditResultClient } from './client';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient as createPublicClient } from '@supabase/supabase-js';
+
+function getSupabaseForMeta() {
+  const admin = createAdminClient();
+  if (admin) return admin;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+    ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return createPublicClient(url, key, { auth: { persistSession: false } });
+}
 
 export async function generateMetadata({
   params,
@@ -14,11 +25,11 @@ export async function generateMetadata({
   const { token } = await params;
   
   const defaultMeta: Metadata = {
-    title: 'SpendLens AI Audit',
+    title: 'StackDown AI Audit',
     description: 'Check out this AI tool spend optimization audit.',
   };
 
-  const supabase = createAdminClient();
+  const supabase = getSupabaseForMeta();
   if (!supabase) return defaultMeta;
 
   const { data } = await supabase
@@ -31,8 +42,8 @@ export async function generateMetadata({
 
   const savings = data.audit_result.totalMonthlySavings;
   const title = savings > 0 
-    ? `SpendLens found $${Math.round(savings).toLocaleString()}/mo in AI savings`
-    : 'SpendLens AI Audit - Stack is Optimized';
+    ? `StackDown found $${Math.round(savings).toLocaleString()}/mo in AI savings`
+    : 'StackDown AI Audit - Stack is Optimized';
 
   return {
     title,
@@ -46,7 +57,7 @@ export async function generateMetadata({
           url: `/og-default.png`,
           width: 1200,
           height: 630,
-          alt: 'SpendLens Audit Result',
+          alt: 'StackDown Audit Result',
         },
       ],
     },
@@ -55,10 +66,10 @@ export async function generateMetadata({
 
 function LoadingShell() {
   return (
-    <div className="min-h-screen bg-[#09090B] flex items-center justify-center">
+    <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="flex flex-col items-center gap-3">
         <div className="w-8 h-8 border-2 border-[#22C55E] border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm text-[#71717A]">Loading your audit...</p>
+        <p className="text-sm text-muted-foreground">Loading your audit...</p>
       </div>
     </div>
   );

@@ -7,18 +7,18 @@ const defaultUrl = process.env.NEXT_PUBLIC_APP_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "SpendLens — AI Spend Audit for Startups",
+  title: "StackDown — AI Spend Audit for Startups",
   description:
     "Find out in 3 minutes where your team is overspending on AI tools. Free, no login required. Powered by Credex.",
   openGraph: {
-    title: "SpendLens — AI Spend Audit for Startups",
+    title: "StackDown — AI Spend Audit for Startups",
     description: "Most startups overspend 20-40% on AI subscriptions. Find out in 3 minutes — free, no login.",
     type: "website",
     url: defaultUrl,
   },
   twitter: {
     card: "summary_large_image",
-    title: "SpendLens — AI Spend Audit for Startups",
+    title: "StackDown — AI Spend Audit for Startups",
     description: "Most startups overspend 20-40% on AI subscriptions. Find out in 3 minutes — free, no login.",
   },
 };
@@ -35,17 +35,26 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+import { ThemeProvider } from "@/components/theme-provider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased bg-[#09090B] text-[#FAFAFA]`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased bg-background text-foreground`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

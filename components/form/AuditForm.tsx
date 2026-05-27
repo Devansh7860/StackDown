@@ -140,6 +140,8 @@ export function AuditForm() {
 
   function goBack() {
     setDirection(-1);
+    setIsSubmitting(false); // reset submit state if user backs out
+    setSubmitError(null);
     setFormState(prev => ({ ...prev, currentStep: Math.max(1, prev.currentStep - 1) }));
   }
 
@@ -180,9 +182,16 @@ export function AuditForm() {
 
       const data = await res.json();
       clearState();
-      // Cache result in sessionStorage so results page renders without Supabase
+      setIsSubmitting(false);
+      // Cache result in sessionStorage AND localStorage so results page renders
+      // without Supabase — sessionStorage for current tab, localStorage for new tabs
       try {
-        sessionStorage.setItem(`audit_${data.shareToken}`, JSON.stringify(data));
+        const cacheKey = `audit_${data.shareToken}`;
+        const cacheValue = JSON.stringify(data);
+        sessionStorage.setItem(cacheKey, cacheValue);
+        // Keep localStorage cache for 7 days so share links work across tabs
+        localStorage.setItem(cacheKey, cacheValue);
+        localStorage.setItem(`${cacheKey}_ts`, String(Date.now()));
       } catch { /* storage unavailable — results page will try Supabase */ }
       router.push(`/audit/${data.shareToken}`);
     } catch (err: unknown) {
@@ -203,7 +212,7 @@ export function AuditForm() {
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
-            className="mb-4 flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#111113] border border-[#1E1E21] text-sm text-[#71717A]"
+            className="mb-4 flex items-center gap-2 px-4 py-2.5 rounded-lg bg-card border border-border text-sm text-muted-foreground"
           >
             <Minus className="w-3 h-3" />
             <span>Previous session restored.</span>
@@ -211,7 +220,7 @@ export function AuditForm() {
         )}
       </AnimatePresence>
 
-      <div className="bg-[#111113] border border-[#1E1E21] rounded-xl p-6 shadow-lg">
+      <div className="bg-card border border-border rounded-xl p-6 shadow-lg">
         <StepIndicator currentStep={currentStep} />
 
         {/* Animated step content */}
@@ -268,13 +277,13 @@ export function AuditForm() {
 
         {/* Navigation buttons (steps 1 + 2 only — step 3 has its own submit button) */}
         {currentStep < 3 && (
-          <div className="flex items-center justify-between mt-6 pt-4 border-t border-[#27272A]">
+          <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
             <button
               type="button"
               onClick={goBack}
               disabled={currentStep === 1}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-md text-sm text-[#A1A1AA]
-                hover:text-[#FAFAFA] hover:bg-[#27272A] disabled:opacity-30 disabled:cursor-not-allowed
+              className="flex items-center gap-1.5 px-4 py-2 rounded-md text-sm text-muted-foreground
+                hover:text-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed
                 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -298,8 +307,8 @@ export function AuditForm() {
           <button
             type="button"
             onClick={goBack}
-            className="flex items-center gap-1.5 mt-3 px-4 py-2 rounded-md text-sm text-[#71717A]
-              hover:text-[#A1A1AA] hover:bg-[#27272A] transition-colors"
+            className="flex items-center gap-1.5 mt-3 px-4 py-2 rounded-md text-sm text-muted-foreground
+              hover:text-muted-foreground hover:bg-muted transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             Edit tools

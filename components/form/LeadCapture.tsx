@@ -42,22 +42,22 @@ export function LeadCapture({ token, totalSavings }: LeadCaptureProps) {
   }
 
   return (
-    <div className="bg-[#111113] border border-[#1E1E21] rounded-xl p-6 relative overflow-hidden">
+    <div className="bg-card border border-border rounded-xl p-6 relative overflow-hidden">
       {/* Decorative gradient */}
       <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent opacity-50" />
       
-      <div className="flex items-start justify-between gap-6">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
         <div className="space-y-2 flex-1">
-          <h3 className="text-sm font-semibold text-[#FAFAFA] flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
             Email this report
           </h3>
-          <p className="text-xs text-[#71717A] leading-relaxed max-w-md">
+          <p className="text-xs text-muted-foreground leading-relaxed max-w-md">
             Get a permanent link to this audit sent to your inbox. Plus, teams that complete an audit get priority access to 15-30% volume discounts on Anthropic and OpenAI API credits via Credex.
           </p>
         </div>
 
-        <div className="flex-1 max-w-[280px]">
+        <div className="flex-1 w-full sm:max-w-[280px]">
           <AnimatePresence mode="wait">
             {status === 'success' ? (
               <motion.div
@@ -79,7 +79,7 @@ export function LeadCapture({ token, totalSavings }: LeadCaptureProps) {
                 className="flex flex-col gap-2"
               >
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#52525B]" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
                     type="email"
                     name="email"
@@ -87,8 +87,8 @@ export function LeadCapture({ token, totalSavings }: LeadCaptureProps) {
                     placeholder="Enter your work email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-[#09090B] border border-[#27272A] rounded-lg pl-9 pr-3 py-2 text-sm
-                      text-[#FAFAFA] placeholder:text-[#52525B] focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]
+                    className="w-full bg-background border border-border rounded-lg pl-9 pr-3 py-2 text-sm
+                      text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#3B82F6] focus:border-[#3B82F6]
                       transition-colors"
                   />
                 </div>

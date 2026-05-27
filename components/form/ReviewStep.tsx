@@ -43,38 +43,38 @@ export function ReviewStep({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-[#FAFAFA] mb-1">
+        <h2 className="text-lg font-semibold text-foreground mb-1">
           Review your stack
         </h2>
-        <p className="text-sm text-[#71717A]">
+        <p className="text-sm text-muted-foreground">
           Confirm everything looks right before we run your audit.
         </p>
       </div>
 
       {/* Tool list */}
-      <div className="border border-[#27272A] rounded-lg overflow-hidden">
-        <div className="px-4 py-2 bg-[#27272A] border-b border-[#3F3F46]">
-          <p className="text-xs font-semibold text-[#71717A] uppercase tracking-wider">Your AI Stack</p>
+      <div className="border border-border rounded-lg overflow-hidden">
+        <div className="px-4 py-2 bg-muted border-b border-muted">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Your AI Stack</p>
         </div>
         <div className="divide-y divide-[#27272A]">
           {tools.map((tool) => {
             const toolMeta = TOOLS[tool.toolId];
             return (
-              <div key={tool.toolId} className="flex items-center justify-between px-4 py-3 hover:bg-[#18181B] transition-colors">
+              <div key={tool.toolId} className="flex items-center justify-between px-4 py-3 hover:bg-secondary transition-colors">
                 <div className="flex items-center gap-3">
                   <ToolLogo toolId={tool.toolId} size={18} />
                   <div>
-                    <p className="text-sm font-medium text-[#FAFAFA]">{toolMeta.name}</p>
-                    <p className="text-xs text-[#71717A]">
+                    <p className="text-sm font-medium text-foreground">{toolMeta.name}</p>
+                    <p className="text-xs text-muted-foreground">
                       {tool.planId ? tool.planId.split('_').slice(1).join(' ') : 'No plan selected'} · {tool.seats} seat{tool.seats !== 1 ? 's' : ''}
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-sm font-mono font-semibold text-[#FAFAFA]">
+                  <span className="text-sm font-mono font-semibold text-foreground">
                     ${tool.monthlySpend.toLocaleString()}
                   </span>
-                  <span className="text-xs text-[#71717A]">/mo</span>
+                  <span className="text-xs text-muted-foreground">/mo</span>
                 </div>
               </div>
             );
@@ -82,21 +82,21 @@ export function ReviewStep({
         </div>
 
         {/* Totals */}
-        <div className="px-4 py-3 bg-[#27272A] border-t border-[#3F3F46] space-y-1">
+        <div className="px-4 py-3 bg-muted border-t border-muted space-y-1">
           <div className="flex justify-between items-center">
-            <span className="text-xs text-[#71717A]">
+            <span className="text-xs text-muted-foreground">
               Team · {teamSize} people · {useCase ? USE_CASE_LABELS[useCase] : '—'}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-sm text-[#A1A1AA]">Monthly total</span>
-            <span className="text-sm font-mono font-bold text-[#FAFAFA]">
-              ${totalMonthly.toLocaleString()}<span className="text-[#71717A] font-normal">/mo</span>
+            <span className="text-sm text-muted-foreground">Monthly total</span>
+            <span className="text-sm font-mono font-bold text-foreground">
+              ${totalMonthly.toLocaleString()}<span className="text-muted-foreground font-normal">/mo</span>
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-xs text-[#71717A]">Annual</span>
-            <span className="text-xs font-mono text-[#71717A]">
+            <span className="text-xs text-muted-foreground">Annual</span>
+            <span className="text-xs font-mono text-muted-foreground">
               ${totalAnnual.toLocaleString()}/yr
             </span>
           </div>
@@ -124,7 +124,7 @@ export function ReviewStep({
         )}
       </button>
 
-      <p className="text-center text-xs text-[#71717A]">
+      <p className="text-center text-xs text-muted-foreground">
         Your data is analyzed server-side and immediately linked to a private URL.
         No account created. Results are instant.
       </p>

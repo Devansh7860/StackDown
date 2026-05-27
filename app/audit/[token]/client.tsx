@@ -28,6 +28,7 @@ import { cn } from '@/lib/utils';
 import type { AuditResult, ToolRecommendation, OverlapWarning } from '@/lib/audit-engine/types';
 import { TOOLS } from '@/lib/audit-engine/tools';
 import { ToolLogo } from '@/components/ui/tool-logo';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { useCountUp } from '@/hooks/useCountUp';
 import { LeadCapture } from '@/components/form/LeadCapture';
 
@@ -66,19 +67,19 @@ function KpiCard({
   const colorMap = {
     green: 'text-[#22C55E]',
     red: 'text-[#EF4444]',
-    neutral: 'text-[#FAFAFA]',
+    neutral: 'text-foreground',
   };
 
   return (
-    <div className="relative overflow-hidden bg-[#111113] border border-[#1E1E21] rounded-xl p-6 shadow-sm">
+    <div className="relative overflow-hidden bg-card border border-border rounded-xl p-6 shadow-sm">
       {highlight === 'green' && (
          <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#10B981] to-transparent opacity-50" />
       )}
-      <p className="text-[11px] text-[#52525B] uppercase tracking-wider mb-2 font-medium">{label}</p>
+      <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-2 font-medium">{label}</p>
       <p className={cn('text-3xl font-semibold mono-num tracking-tight', colorMap[highlight ?? 'neutral'])}>
         {value}
       </p>
-      {subtext && <p className="text-xs text-[#71717A] mt-1.5 font-medium">{subtext}</p>}
+      {subtext && <p className="text-xs text-muted-foreground mt-1.5 font-medium">{subtext}</p>}
     </div>
   );
 }
@@ -90,29 +91,29 @@ function ToolBreakdownRow({ rec }: { rec: ToolRecommendation }) {
   const optimizedCost = rec.currentMonthlySpend - rec.monthlySavings;
 
   return (
-    <div className="border-b border-[#1E1E21] last:border-b-0 p-4 hover:bg-[#111113] transition-colors">
+    <div className="border-b border-border last:border-b-0 p-4 hover:bg-card transition-colors">
       <div className="w-full flex items-center justify-between gap-4">
         {/* Left side: Logo + Name */}
         <div className="flex items-center gap-3 min-w-0 w-[200px] flex-shrink-0">
           <ToolLogo toolId={rec.toolId} size={20} className="flex-shrink-0 opacity-80" />
           <div className="min-w-0">
-            <span className="block text-sm text-[#FAFAFA] font-medium truncate">{rec.toolName}</span>
-            <span className="block text-[11px] text-[#71717A] truncate mt-0.5">{rec.currentPlan}</span>
+            <span className="block text-sm text-foreground font-medium truncate">{rec.toolName}</span>
+            <span className="block text-[11px] text-muted-foreground truncate mt-0.5">{rec.currentPlan}</span>
           </div>
         </div>
 
         {/* Center: The Ledger (Current -> Optimized -> Savings) */}
         <div className="hidden sm:flex flex-1 items-center justify-end gap-10">
           <div className="w-20 text-right">
-            <span className="text-sm mono-num text-[#A1A1AA]">{fmt(rec.currentMonthlySpend)}</span>
+            <span className="text-sm mono-num text-muted-foreground">{fmt(rec.currentMonthlySpend)}</span>
           </div>
           
-          <ArrowDownRight className="w-3.5 h-3.5 text-[#3F3F46] flex-shrink-0 opacity-50" />
+          <ArrowDownRight className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0 opacity-50" />
           
           <div className="w-20 text-right">
             <span className={cn(
               "text-sm mono-num font-medium",
-              hasSavings ? "text-[#FAFAFA]" : "text-[#71717A]"
+              hasSavings ? "text-foreground" : "text-muted-foreground"
             )}>
               {fmt(optimizedCost)}
             </span>
@@ -121,7 +122,7 @@ function ToolBreakdownRow({ rec }: { rec: ToolRecommendation }) {
           <div className="w-24 text-right">
             <span className={cn(
               'text-sm mono-num font-medium',
-              hasSavings ? 'text-[#10B981]' : 'text-[#3F3F46]'
+              hasSavings ? 'text-[#10B981]' : 'text-muted-foreground'
             )}>
               {hasSavings ? `-${fmt(rec.monthlySavings)}` : '--'}
             </span>
@@ -133,7 +134,7 @@ function ToolBreakdownRow({ rec }: { rec: ToolRecommendation }) {
           <span className={cn(
             'text-[10px] font-medium px-2 py-0.5 rounded uppercase tracking-wider',
               rec.recommendedAction === 'keep'
-              ? 'text-[#71717A] bg-[#18181B] border border-[#27272A]'
+              ? 'text-muted-foreground bg-secondary border border-border'
               : rec.recommendedAction === 'cancel'
                 ? 'text-[#EF4444] bg-[#EF4444]/10 border border-[#EF4444]/20'
                 : 'text-[#10B981] bg-[#10B981]/10 border border-[#10B981]/20'
@@ -146,15 +147,19 @@ function ToolBreakdownRow({ rec }: { rec: ToolRecommendation }) {
       {/* Reasoning Sub-row */}
       {(rec.recommendedAction !== 'keep' || rec.reasoning.length > 50) && (
         <div className="mt-3 pl-8 sm:pl-[244px] pr-24">
-           <div className="flex items-start gap-2">
-             <div className="w-[1px] h-4 bg-[#27272A] mt-1 ml-1 flex-shrink-0" />
-             <div>
-               <p className="text-[12px] text-[#71717A] leading-relaxed">
+           <div className="flex items-start gap-3 p-3 bg-secondary/50 rounded-lg border border-border/50">
+             <div className="flex-1">
+               {rec.recommendedAction !== 'keep' && (
+                 <p className="text-[11px] font-semibold uppercase tracking-wider text-foreground mb-1">
+                   Action to take:
+                 </p>
+               )}
+               <p className="text-[12px] text-muted-foreground leading-relaxed">
                  {rec.reasoning}
                </p>
                {rec.credexRelevant && (
-                <p className="text-[10px] text-[#3B82F6] mt-1.5 flex items-center gap-1">
-                  <span className="w-1 h-1 rounded-full bg-[#3B82F6]" />
+                <p className="text-[10px] text-[#3B82F6] mt-2 flex items-center gap-1.5 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
                   Qualifies for Credex Volume Discount
                 </p>
                )}
@@ -170,7 +175,7 @@ function ToolBreakdownRow({ rec }: { rec: ToolRecommendation }) {
 
 function OverlapCallout({ overlap }: { overlap: OverlapWarning }) {
   return (
-    <div className="relative overflow-hidden bg-[#111113] border border-[#1E1E21] rounded-xl p-5 shadow-sm">
+    <div className="relative overflow-hidden bg-card border border-border rounded-xl p-5 shadow-sm">
       <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#EF4444] to-transparent opacity-40" />
       <div className="flex items-start gap-4">
         <div className="w-8 h-8 rounded-full bg-[#EF4444]/10 flex items-center justify-center flex-shrink-0">
@@ -178,12 +183,12 @@ function OverlapCallout({ overlap }: { overlap: OverlapWarning }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-1">
-            <h4 className="text-sm text-[#FAFAFA] font-medium">{overlap.toolNames.join(' & ')}</h4>
+            <h4 className="text-sm text-foreground font-medium">{overlap.toolNames.join(' & ')}</h4>
             <span className="text-[11px] mono-num font-medium text-[#EF4444] bg-[#EF4444]/10 px-2 py-0.5 rounded">
               Est. Waste: {fmt(overlap.estimatedWaste)}/mo
             </span>
           </div>
-          <p className="text-xs text-[#71717A] leading-relaxed">{overlap.suggestedAction}</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">{overlap.suggestedAction}</p>
         </div>
       </div>
     </div>
@@ -202,17 +207,44 @@ export function AuditResultClient() {
 
   useEffect(() => {
     if (!token) return;
+
+    const cacheKey = `audit_${token}`;
+
+    // 1. Check sessionStorage (same-tab fast path)
     try {
-      const cached = sessionStorage.getItem(`audit_${token}`);
+      const cached = sessionStorage.getItem(cacheKey);
       if (cached) {
         setData(JSON.parse(cached) as AuditData);
         return;
       }
     } catch { /* no sessionStorage */ }
 
+    // 2. Check localStorage (new tab, same browser — 7-day cache)
+    try {
+      const lsCached = localStorage.getItem(cacheKey);
+      const lsTs = localStorage.getItem(`${cacheKey}_ts`);
+      const sevenDays = 7 * 24 * 60 * 60 * 1000;
+      if (lsCached && lsTs && Date.now() - Number(lsTs) < sevenDays) {
+        const parsed = JSON.parse(lsCached) as AuditData;
+        setData(parsed);
+        // Backfill sessionStorage for repeated access
+        try { sessionStorage.setItem(cacheKey, lsCached); } catch { /* noop */ }
+        return;
+      }
+    } catch { /* no localStorage */ }
+
+    // 3. Fall through to Supabase API
     fetch(`/api/audit/${token}`)
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then((d: AuditData) => setData(d))
+      .then((d: AuditData) => {
+        setData(d);
+        // Cache for future loads
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify(d));
+          localStorage.setItem(cacheKey, JSON.stringify(d));
+          localStorage.setItem(`${cacheKey}_ts`, String(Date.now()));
+        } catch { /* noop */ }
+      })
       .catch(() => setNotFound(true));
   }, [token]);
 
@@ -234,7 +266,7 @@ export function AuditResultClient() {
     const url = window.location.href;
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'SpendLens Audit', url });
+        await navigator.share({ title: 'StackDown Audit', url });
         return;
       } catch (err) {
         if ((err as Error).name === 'AbortError') return;
@@ -248,11 +280,11 @@ export function AuditResultClient() {
 
   if (notFound) {
     return (
-      <div className="min-h-screen bg-[#09090B] flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-3">
-          <p className="text-sm font-medium text-[#FAFAFA]">Audit not found</p>
-          <p className="text-xs text-[#52525B]">This link may have expired or is invalid.</p>
-          <Link href="/" className="inline-flex items-center gap-2 text-xs text-[#71717A] hover:text-[#A1A1AA]">
+          <p className="text-sm font-medium text-foreground">Audit not found</p>
+          <p className="text-xs text-muted-foreground">This link may have expired or is invalid.</p>
+          <Link href="/" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-muted-foreground">
             <ArrowLeft className="w-3 h-3" /> Run a new audit
           </Link>
         </div>
@@ -262,10 +294,10 @@ export function AuditResultClient() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-[#09090B] flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-6 h-6 border-2 border-[#27272A] border-t-[#FAFAFA] rounded-full animate-spin" />
-          <p className="text-xs text-[#52525B]">Loading audit...</p>
+          <div className="w-6 h-6 border-2 border-border border-t-[#FAFAFA] rounded-full animate-spin" />
+          <p className="text-xs text-muted-foreground">Loading audit...</p>
         </div>
       </div>
     );
@@ -275,28 +307,29 @@ export function AuditResultClient() {
   const optimizedSpend = result.totalCurrentSpend - result.totalMonthlySavings;
 
   return (
-    <div className="min-h-screen bg-[#09090B]">
+    <div className="min-h-screen bg-background">
       {/* Nav */}
-      <nav className="no-print sticky top-0 z-50 border-b border-[#1E1E21] bg-[#09090B]/90 backdrop-blur-sm">
+      <nav className="no-print sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-xs text-[#52525B] hover:text-[#A1A1AA] transition-colors">
+          <Link href="/" className="flex items-center gap-2 text-xs text-muted-foreground hover:text-muted-foreground transition-colors">
             <ArrowLeft className="w-3 h-3" />
-            <span className="font-semibold text-[#FAFAFA] text-sm">SpendLens</span>
+            <span className="font-semibold text-foreground text-sm">StackDown</span>
           </Link>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <button
               onClick={() => window.print()}
               className="no-print flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-medium
-                bg-[#111113] border border-[#1E1E21] text-[#52525B]
-                hover:border-[#27272A] hover:text-[#A1A1AA] transition-colors"
+                bg-card border border-border text-muted-foreground
+                hover:border-border hover:text-muted-foreground transition-colors"
             >
               Download PDF
             </button>
             <button
               onClick={copyLink}
               className="no-print flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-medium
-                bg-[#111113] border border-[#1E1E21] text-[#52525B]
-                hover:border-[#27272A] hover:text-[#A1A1AA] transition-colors"
+                bg-card border border-border text-muted-foreground
+                hover:border-border hover:text-muted-foreground transition-colors"
             >
               {copied ? <Check className="w-3 h-3 text-[#22C55E]" /> : <Copy className="w-3 h-3" />}
               {copied ? 'Copied' : 'Share'}
@@ -336,7 +369,7 @@ export function AuditResultClient() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="relative overflow-hidden bg-gradient-to-b from-[#111113] to-[#09090B] border border-[#1E1E21] rounded-xl p-6 shadow-sm"
+            className="relative overflow-hidden bg-gradient-to-b from-[#111113] to-[#09090B] border border-border rounded-xl p-6 shadow-sm"
           >
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent opacity-40" />
             <div className="flex items-start gap-4">
@@ -344,8 +377,8 @@ export function AuditResultClient() {
                  <span className="w-2 h-2 rounded-full bg-[#3B82F6]" />
                </div>
                <div>
-                 <p className="text-[11px] text-[#A1A1AA] uppercase tracking-wider mb-2 font-medium">Executive Briefing</p>
-                 <p className="text-[14px] text-[#FAFAFA] leading-relaxed font-medium">
+                 <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-2 font-medium">Executive Briefing</p>
+                 <p className="text-[14px] text-foreground leading-relaxed font-medium">
                    {aiSummary}
                  </p>
                </div>
@@ -359,11 +392,11 @@ export function AuditResultClient() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-gradient-to-b from-[#111113] to-[#09090B] border border-[#1E1E21] rounded-xl p-6 shadow-sm"
+            className="bg-gradient-to-b from-[#111113] to-[#09090B] border border-border rounded-xl p-6 shadow-sm"
           >
-            <p className="text-[11px] text-[#A1A1AA] uppercase tracking-wider mb-6 font-medium flex items-center gap-2">
+            <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-6 font-medium flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#3B82F6]" /> Current Spend
-              <span className="text-[#3F3F46]">vs</span>
+              <span className="text-muted-foreground">vs</span>
               <span className="w-2 h-2 rounded-full bg-[#10B981]" /> Optimized
             </p>
             <div className="h-[220px] min-h-[220px]" style={{ minHeight: 220 }}>
@@ -384,18 +417,22 @@ export function AuditResultClient() {
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#18181B',
-                      border: '1px solid #27272A',
-                      borderRadius: '6px',
+                      backgroundColor: 'hsl(var(--card))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px',
                       fontSize: '12px',
-                      color: '#FAFAFA',
+                      color: 'hsl(var(--foreground))',
+                      padding: '8px 12px',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
                     }}
+                    labelStyle={{ color: 'hsl(var(--muted-foreground))', marginBottom: '4px', fontWeight: 500 }}
+                    itemStyle={{ color: 'hsl(var(--foreground))' }}
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     formatter={((value: any, name: string) => [
-                      `$${Math.round(Number(value))}`,
+                      `$${Math.round(Number(value)).toLocaleString()}`,
                       name === 'current' ? 'Current' : 'Optimized',
                     ]) as any}
-                    cursor={{ fill: 'rgba(255,255,255,0.02)' }}
+                    cursor={{ fill: 'rgba(150,150,150,0.1)' }}
                   />
                   <Bar dataKey="current" radius={[4, 4, 0, 0]} maxBarSize={36}>
                     {chartData.map((_, i) => (
@@ -424,7 +461,7 @@ export function AuditResultClient() {
             transition={{ delay: 0.15 }}
             className="space-y-2"
           >
-            <p className="text-[11px] text-[#52525B] uppercase tracking-wider mb-1">
+            <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">
               Overlapping tools
             </p>
             {result.overlaps.map((overlap, i) => (
@@ -440,17 +477,17 @@ export function AuditResultClient() {
           transition={{ delay: 0.2 }}
         >
           <div className="flex items-center justify-between mb-2">
-            <p className="text-[11px] text-[#52525B] uppercase tracking-wider">
+            <p className="text-[11px] text-muted-foreground uppercase tracking-wider">
               Per-tool breakdown
             </p>
-            <div className="hidden sm:flex items-center gap-8 text-[10px] text-[#3F3F46] uppercase tracking-wider pr-16">
+            <div className="hidden sm:flex items-center gap-8 text-[10px] text-muted-foreground uppercase tracking-wider pr-16">
               <span className="w-20 text-right">Current</span>
               <span className="w-3" />
               <span className="w-20 text-right">Optimized</span>
               <span className="w-20 text-right">Savings</span>
             </div>
           </div>
-          <div className="bg-[#111113] border border-[#1E1E21] rounded-lg overflow-hidden">
+          <div className="bg-card border border-border rounded-lg overflow-hidden">
             {result.recommendations.map(rec => (
               <ToolBreakdownRow key={rec.toolId} rec={rec} />
             ))}
@@ -461,15 +498,15 @@ export function AuditResultClient() {
 
         {/* Credex CTA — minimal */}
         {result.totalMonthlySavings > 0 && (
-          <div className="flex items-center justify-between py-3 px-4 rounded-md bg-[#111113] border border-[#1E1E21]">
-            <p className="text-xs text-[#52525B]">
+          <div className="flex items-center justify-between py-3 px-4 rounded-md bg-card border border-border">
+            <p className="text-xs text-muted-foreground">
               Credex offers 15-30% off AI API credits for qualifying teams.
             </p>
             <a
-              href="https://credex.in"
+              href="https://credex.rocks"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-xs text-[#71717A] hover:text-[#FAFAFA] transition-colors flex-shrink-0"
+              className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors flex-shrink-0"
             >
               Learn more <ExternalLink className="w-3 h-3" />
             </a>
@@ -487,7 +524,7 @@ export function AuditResultClient() {
 
         {/* Footer link */}
         <div className="text-center pb-8">
-          <Link href="/#audit" className="text-xs text-[#3F3F46] hover:text-[#71717A] transition-colors">
+          <Link href="/#audit" className="text-xs text-muted-foreground hover:text-muted-foreground transition-colors">
             Run another audit
           </Link>
         </div>
