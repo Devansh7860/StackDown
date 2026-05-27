@@ -10,9 +10,10 @@ Built as a lead-generation tool for [Credex](https://credex.in), which helps sta
 
 ## Screenshots
 
-![Landing page](./public/screenshots/landing.png)
-![Audit results dashboard](./public/screenshots/results.png)
-
+![alt text](image-5.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
+![alt text](image-4.png)
 ---
 
 ## Features
@@ -59,7 +60,7 @@ npm test
 
 This project is deployed on Vercel. Every push to `main` auto-deploys.
 
-**Deployed URL:** `https://spendlens.vercel.app` *(update with your live URL)*
+**Deployed URL:** `https://stackdown.vercel.app`
 
 ---
 

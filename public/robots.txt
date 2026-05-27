@@ -4,4 +4,4 @@ Allow: /
 # Block audit-specific pages from being indexed by search bots
 Disallow: /api/
 
-Sitemap: https://spendlens.vercel.app/sitemap.xml
+Sitemap: https://stackdown.vercel.app/sitemap.xml
