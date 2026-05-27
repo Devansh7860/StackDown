@@ -2,8 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const defaultUrl = process.env.NEXT_PUBLIC_APP_URL
+let defaultUrl = process.env.NEXT_PUBLIC_APP_URL
   || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
+if (!defaultUrl.startsWith("http")) {
+  defaultUrl = `https://${defaultUrl}`;
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
