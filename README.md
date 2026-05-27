@@ -4,7 +4,7 @@
 
 StackDown analyzes your team's AI tool subscriptions, identifies overlap and oversized plans, and shows you **exactly how much you can save** — with specific reasoning for every recommendation.
 
-Built as a lead-generation tool for [Credex](https://credex.in), which helps startups access discounted AI infrastructure credits.
+Built as a lead-generation tool for [Credex](https://credex.rocks), which helps startups access discounted AI infrastructure credits.
 
 ---
 
