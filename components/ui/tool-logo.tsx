@@ -11,6 +11,7 @@ interface ToolLogoProps {
 
 export function ToolLogo({ toolId, size = 20, className }: ToolLogoProps) {
   return (
+    /* eslint-disable-next-line @next/next/no-img-element */
     <img
       src={`/logos/${toolId}.svg`}
       alt={`${toolId} logo`}

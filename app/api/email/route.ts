@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     // Just try to update the audit record with the email
     const { error } = await supabase
       .from('audits')
-      .update({ email: email } as any)
+      .update({ email: email } as never)
       .eq('share_token', token);
 
     if (error) {

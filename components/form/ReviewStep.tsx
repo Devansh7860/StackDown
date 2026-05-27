@@ -17,7 +17,6 @@ interface ReviewStepProps {
   teamSize: number;
   useCase: UseCase | '';
   onSubmit: () => void;
-  onBack: () => void;
   isSubmitting: boolean;
 }
 
@@ -34,7 +33,6 @@ export function ReviewStep({
   teamSize,
   useCase,
   onSubmit,
-  onBack,
   isSubmitting,
 }: ReviewStepProps) {
   const totalMonthly = tools.reduce((sum, t) => sum + t.monthlySpend, 0);

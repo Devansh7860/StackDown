@@ -2,7 +2,7 @@
 // Per-tool evaluation logic — every rule must be financially defensible.
 
 import type { ToolId, ToolInput, UseCase, ToolRecommendation } from './types';
-import { getPlanById, getPlansForTool, TOOLS } from './tools';
+import { getPlanById, TOOLS } from './tools';
 
 interface EvalContext {
   teamSize: number;
@@ -189,7 +189,7 @@ function evalClaude(tool: ToolInput, ctx: EvalContext): ToolRecommendation {
   };
 }
 
-function evalChatGPT(tool: ToolInput, ctx: EvalContext): ToolRecommendation {
+function evalChatGPT(tool: ToolInput, _ctx: EvalContext): ToolRecommendation {
   const plan = getPlanById(tool.planId);
   const base = {
     toolId: tool.toolId,

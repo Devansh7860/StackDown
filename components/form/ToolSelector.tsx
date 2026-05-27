@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { TOOL_IDS, TOOLS } from '@/lib/audit-engine/tools';
+import { TOOL_IDS } from '@/lib/audit-engine/tools';
 import type { ToolId } from '@/lib/audit-engine/types';
 import { ToolRow } from './ToolRow';
 import { DollarSign } from 'lucide-react';

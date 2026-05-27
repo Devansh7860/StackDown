@@ -266,11 +266,11 @@ export default function HomePage() {
           <div className="space-y-8">
             <div>
               <h3 className="text-sm font-semibold text-foreground mb-2">Do I need to create an account?</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">No. The entire audit runs without a login or email address. We only ask for your email after showing your full results — and it's completely optional.</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">No. The entire audit runs without a login or email address. We only ask for your email after showing your full results — and it&apos;s completely optional.</p>
             </div>
             <div>
               <h3 className="text-sm font-semibold text-foreground mb-2">Where does the pricing data come from?</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Every plan price comes from each vendor's official pricing page, verified weekly. Sources and verification dates are documented in our public pricing data file.</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">Every plan price comes from each vendor&apos;s official pricing page, verified weekly. Sources and verification dates are documented in our public pricing data file.</p>
             </div>
             <div>
               <h3 className="text-sm font-semibold text-foreground mb-2">Will you sell my data?</h3>
@@ -281,7 +281,7 @@ export default function HomePage() {
               <p className="text-sm text-muted-foreground leading-relaxed">The audit uses rule-based logic, not AI guesses. Each recommendation includes specific reasoning you can verify yourself. Think of it as a rigorous starting point, not a final decision.</p>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-foreground mb-2">What's Credex?</h3>
+              <h3 className="text-sm font-semibold text-foreground mb-2">What&apos;s Credex?</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">Credex helps startups access discounted AI infrastructure credits from companies that over-purchased. The discounts are real — typically 15-30% below retail. StackDown is built by Credex as a free tool to help you find your savings first.</p>
             </div>
             <div>

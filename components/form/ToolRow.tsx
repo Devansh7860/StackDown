@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Plus, X, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { TOOLS, PLANS, getPlansForTool } from '@/lib/audit-engine/tools';
+import { TOOLS, getPlansForTool } from '@/lib/audit-engine/tools';
 import type { ToolId } from '@/lib/audit-engine/types';
 import { ToolLogo } from '@/components/ui/tool-logo';
 

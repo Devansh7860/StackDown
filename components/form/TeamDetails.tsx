@@ -68,7 +68,7 @@ export function TeamDetails({
       {/* Use case */}
       <div>
         <label className="block text-sm font-medium text-muted-foreground mb-3">
-          What is your team's primary use for AI tools?
+          What is your team&apos;s primary use for AI tools?
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {USE_CASES.map(({ id, label, icon, desc }) => {

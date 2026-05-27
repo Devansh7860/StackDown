@@ -9,10 +9,7 @@ import {
   Copy,
   Check,
   ExternalLink,
-  ChevronDown,
-  ChevronUp,
   AlertTriangle,
-  Minus,
   ArrowDownRight,
 } from 'lucide-react';
 import {
@@ -26,7 +23,6 @@ import {
 } from 'recharts';
 import { cn } from '@/lib/utils';
 import type { AuditResult, ToolRecommendation, OverlapWarning } from '@/lib/audit-engine/types';
-import { TOOLS } from '@/lib/audit-engine/tools';
 import { ToolLogo } from '@/components/ui/tool-logo';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { useCountUp } from '@/hooks/useCountUp';
@@ -428,7 +424,7 @@ export function AuditResultClient() {
                     labelStyle={{ color: 'hsl(var(--muted-foreground))', marginBottom: '4px', fontWeight: 500 }}
                     itemStyle={{ color: 'hsl(var(--foreground))' }}
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    formatter={((value: any, name: string) => [
+                    formatter={((value: number | string, name: string) => [
                       `$${Math.round(Number(value)).toLocaleString()}`,
                       name === 'current' ? 'Current' : 'Optimized',
                     ]) as any}
