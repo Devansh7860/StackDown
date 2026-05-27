@@ -42,7 +42,7 @@ const OVERLAP_RULES: OverlapRule[] = [
       'GitHub Copilot and Windsurf both provide in-editor AI code completion and chat. Windsurf\'s Cascade feature subsumes Copilot\'s inline suggestion workflow. Teams using Windsurf as their IDE do not need a separate Copilot subscription.',
     suggestedAction:
       'Cancel GitHub Copilot if Windsurf is your team\'s primary IDE.',
-    savingsCalc: (copilot, windsurf) => copilot.monthlySpend,
+    savingsCalc: (copilot) => copilot.monthlySpend,
   },
   {
     tools: ['claude', 'chatgpt'],

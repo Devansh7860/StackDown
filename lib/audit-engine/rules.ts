@@ -189,7 +189,7 @@ function evalClaude(tool: ToolInput, ctx: EvalContext): ToolRecommendation {
   };
 }
 
-function evalChatGPT(tool: ToolInput, _ctx: EvalContext): ToolRecommendation {
+function evalChatGPT(tool: ToolInput): ToolRecommendation {
   const plan = getPlanById(tool.planId);
   const base = {
     toolId: tool.toolId,
